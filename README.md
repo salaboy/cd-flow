@@ -41,7 +41,8 @@ The idea behind this framework and command-line interface is to empower you  emi
   - Version
   - Source
 - Lifecycle Events:
-  - **CDF.Artifact.Tested**
+  - **CDF.Artifact.TestStarted**
+  - **CDF.Artifact.TestEnded**  
     - TestPassed
   - **CDF.Artifact.Built**
     - SHA 
