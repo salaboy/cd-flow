@@ -21,20 +21,27 @@ The following events are currently supported:
 
 Use `cdf issue --help`
 
-- Base
-  - Id
-  - Title
-  - Repository
-  - Author
-- Lifecycle Events
-  - **CDF.Issue.Created**
-    Use `cdf issue created --help`
-  - **CDF.Issue.Updated**
-    Use `cdf issue updated --help`  
-  - **CDF.Issue.CommentAdded**
-    Use `cdf issue commented --help`
-  - **CDF.Issue.Closed**
-    Use `cdf issue closed --help`
+- Base Properties
+  - Id (required)
+  - Title (required)
+  - Repository (required)
+  - Author (required)
+  
+### **CDF.Issue.Created**
+
+Use `cdf issue created --help`
+Example: `./cdf issue created --id 7 --repository my-project --title "new issue" --author salaboy`
+
+### **CDF.Issue.Updated**
+
+Use `cdf issue updated --help`  
+### **CDF.Issue.CommentAdded**
+
+Use `cdf issue commented --help`
+
+### **CDF.Issue.Closed**
+
+Use `cdf issue closed --help`
 
 ## CDF Repository Events
 - Base
