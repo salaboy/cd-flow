@@ -9,13 +9,33 @@ The idea behind this framework and command-line interface is to empower you  emi
 Use `cdf --help`
 
 The following events are currently supported:
-- [Issue Events]()
 - [Repository Events]()
-- [Artifact Events]()
-- [Container Events]()
-- [Service Events]()
+  - [Issue Events]()
+  - [Pull Request Events]()
+  - [Branch Events]()
+  - [Tag Events]()
+- [Pipeline Evnets]()  
+  - [Artifact Events]()
+  - [Container Events]()
 - [Environment Events]()
+  - [Service Events]()
 
+
+# CDF Repository Events
+
+Use `cdf repo --help`
+
+- Base Properties
+  - Name
+  - Url 
+
+### **CDF.Repository.Created** Event 
+
+Example: `./cdf repo created --name my-project --url http://github.com/salaboy/my-project`
+
+### **CDF.Repository.Deleted** Event 
+
+Example: `./cdf repo deleted --name my-project --url http://github.com/salaboy/my-project`
 
 ## CDF Issue Events
 
@@ -46,17 +66,6 @@ Example: `./cdf issue commented --id 7 --repository my-project --comment "new co
 Example: `./cdf issue closed --id 7 --repository my-project`
 
 
-## CDF Repository Events
-
-Use `cdf repo --help`
-
-- Base Properties
-  - Name
-  - Url 
-
-### **CDF.Repository.Created** Event 
-
-### **CDF.Repository.Deleted** Event 
 
 
 
