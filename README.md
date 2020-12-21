@@ -22,9 +22,9 @@ The following events are currently supported:
 Use `cdf issue --help`
 
 - Base
+  - Id
   - Title
-  - Description
-  - URL
+  - Repository
   - Author
 - Lifecycle Events
   - **CDF.Issue.Created**
