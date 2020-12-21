@@ -4,21 +4,33 @@ Simple framework and binary to emit Cloud Events related to Continuous Delivery.
 
 The idea behind this framework and command-line interface is to empower you  emitting events related to a Continuous Delivery flow to measure performance and gain visibility of your processes. 
 
+This project can be used from a command-line interface, for example to integrate with your existing pipelines, or using the docker image provided to add a task to a container based pipeline such as http://tekton.dev
+
+## Usage
+
+Download the binary `cdf` or build from source. 
+
+Set `CDF_SINK` environment variable to define where CloudEvents will be sent. You can do this by running:
+
+`export CDF_SINK=http://my-broker` 
+
+Integrate with your existing pipelines, repositories, and environments. 
+
 ## Supported Events
 
 Use `cdf --help`
 
 The following events are currently supported:
-- [Repository Events]()
-  - [Issue Events]()
-  - [Pull Request Events]()
-  - [Branch Events]()
-  - [Tag Events]()
-- [Pipeline Events]()  
-  - [Artifact Events]()
-  - [Container Events]()
-- [Environment Events]()
-  - [Service Events]()
+- [Repository Events](https://github.com/salaboy/cd-flow/#cdf-repository-events)
+  - [Issue Events](https://github.com/salaboy/cd-flow/#cdf-issue-events)
+  - [Pull Request Events](https://github.com/salaboy/cd-flow/#pull-request-events)
+  - [Branch Events](https://github.com/salaboy/cd-flow/#cdf-branch-events)
+  - [Tag Events](https://github.com/salaboy/cd-flow/#cdf-tag-events)
+- [Pipeline Events](https://github.com/salaboy/cd-flow/#pipeline-events)  
+  - [Artifact Events](https://github.com/salaboy/cd-flow/#artifact-events)
+  - [Container Events](https://github.com/salaboy/cd-flow/#container-events)
+- [Environment Events](https://github.com/salaboy/cd-flow/#environment-events)
+  - [Service Events](https://github.com/salaboy/cd-flow/#service-events)
 - [Infrastructure Events]()  
 
 
@@ -184,16 +196,6 @@ Use `cdf artifact --help`
 
 ### **CDF.Container.Released** Event
   
-## Service Events
-- Base Properties
-  - Name
-  - Url
-  - Version
-  - Environment URL
-
-### **CDF.Service.Deployed** Event
-
-### **CDF.Service.Upgraded** Event
 
 ## Environment Events
 - Base Properties
@@ -206,6 +208,17 @@ Use `cdf artifact --help`
 ### **CDF.Environment.Updated**
 
 ### **CDF.Environment.ServicePromoted**
+
+## Service Events
+- Base Properties
+  - Name
+  - Url
+  - Version
+  - Environment URL
+
+### **CDF.Service.Deployed** Event
+
+### **CDF.Service.Upgraded** Event
 
 # Metrics
 (TBD)
