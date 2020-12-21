@@ -6,7 +6,20 @@ The idea behind this framework and command-line interface is to empower you  emi
 
 ## Supported Events
 
+Use `cdf --help`
+
+The following events are currently supported:
+- [Issue Events]()
+- [Repository Events]()
+- [Artifact Events]()
+- [Container Events]()
+- [Service Events]()
+- [Environment Events]()
+
+
 ## CDF Issue Events
+
+Use `cdf issue --help`
 
 - Base
   - Title
@@ -15,9 +28,13 @@ The idea behind this framework and command-line interface is to empower you  emi
   - Author
 - Lifecycle Events
   - **CDF.Issue.Created**
+    Use `cdf issue created --help`
+  - **CDF.Issue.Updated**
+    Use `cdf issue updated --help`  
   - **CDF.Issue.CommentAdded**
+    Use `cdf issue commented --help`
   - **CDF.Issue.Closed**
-
+    Use `cdf issue closed --help`
 
 ## CDF Repository Events
 - Base
@@ -33,7 +50,7 @@ The idea behind this framework and command-line interface is to empower you  emi
 - Main Events
   - **CDF.Repository.Main.Changed**
 - Tags Events
-    - **CDF.Repository.Tag.Created**
+  - **CDF.Repository.Tag.Created**
 
 ## CDF Artifact Events
 - Base
