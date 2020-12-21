@@ -79,7 +79,7 @@ Use `cdf pr --help`
 
 ### **CDF.PR.Created** Event
 
-Example: `./cdf pr created --id 7 --repository my-project`
+Example: `./cdf pr created --id 42 --repository my-project --author salaboy --title "fixing issue 7"`
 
 ### **CDF.PR.Merged** Event
 
@@ -87,7 +87,7 @@ Example: `./cdf pr merged --id 7 --repository my-project`
 
 ### **CDF.PR.CommentAdded** Event
 
-Example: `./cdf pr commented --id 7 --repository my-project`
+Example: `./cdf pr commented --id 7 --repository my-project --comment "hi there from a pr comment"`
 
 
 ## CDF Branch Events
@@ -136,7 +136,7 @@ Use `cdf pipeline --help`
 
 ### **CDF.Pipeline.Started** Event
 
-Example: `./cdf pipeline started --name my-service-pipeline --id <UUID> --repository my-project`
+Example: `./cdf pipeline started --name my-service-pipeline --id UUID-abc-123 --repository my-project`
 
 ### **CDF.Pipeline.Finished** Event
 
