@@ -23,41 +23,69 @@ Use `cdf issue --help`
 
 - Base Properties
   - Id (required)
-  - Title (required)
   - Repository (required)
-  - Author (required)
+  - Title 
+  - Author 
   
-### **CDF.Issue.Created**
+### **CDF.Issue.Created** Event
 
-Use `cdf issue created --help`
 Example: `./cdf issue created --id 7 --repository my-project --title "new issue" --author salaboy`
 
-### **CDF.Issue.Updated**
 
-Use `cdf issue updated --help`  
-### **CDF.Issue.CommentAdded**
+### **CDF.Issue.Updated** Event
 
-Use `cdf issue commented --help`
 
-### **CDF.Issue.Closed**
+Example: `./cdf issue updated --id 7 --repository my-project`
 
-Use `cdf issue closed --help`
+### **CDF.Issue.CommentAdded** Event
+
+Example: `./cdf issue commented --id 7 --repository my-project --comment "new comment"`
+
+### **CDF.Issue.Closed** Event
+
+Example: `./cdf issue closed --id 7 --repository my-project`
+
 
 ## CDF Repository Events
-- Base
+
+Use `cdf repo --help`
+
+- Base Properties
   - Name
   - Url 
-- PR Events
-  - **CDF.Repository.PR.Created**
-    - PR Url
+  
+
+### Pull Request Events
+
+Use `cdf repo pr --help`
+
+- Base Properties    
+    - PR Id (required)
+    - PR Repository (required)
+    - Issue Id
     - PR Title
-    - Issue
-  - **CDF.Repository.PR.Merged**
-  - **CDF.Repository.PR.CommentAdded**
-- Main Events
-  - **CDF.Repository.Main.Changed**
-- Tags Events
-  - **CDF.Repository.Tag.Created**
+
+
+#### **CDF.Repository.PR.Created** Event
+
+Example: `./cdf repo pr created --id 7 --repository my-project`
+
+#### **CDF.Repository.PR.Merged** Event
+
+Example: `./cdf repo pr merged --id 7 --repository my-project`
+
+#### **CDF.Repository.PR.CommentAdded** Event
+
+Example: `./cdf repo pr comment --id 7 --repository my-project`
+
+### Main Events
+
+#### **CDF.Repository.Main.Changed** Event
+
+### Tags Events
+
+
+#### **CDF.Repository.Tag.Created** Event
 
 ## CDF Artifact Events
 - Base
