@@ -19,6 +19,8 @@ The following events are currently supported:
   - [Container Events]()
 - [Environment Events]()
   - [Service Events]()
+- [Infrastructure Events]()  
+
 
 
 # CDF Repository Events
@@ -144,56 +146,71 @@ Example: `./cdf pipeline finished --name my-service-pipeline --id <UUID> --repos
 
 Example: `./cdf pipeline failed --name my-service-pipeline --id <UUID> --repository my-project`
 
-## CDF Artifact Events
-- Base
+
+## Artifact Events
+
+Use `cdf artifact --help`
+
+- Base Properties
   - Name
   - Version
   - Source
-- Lifecycle Events:
-  - **CDF.Artifact.TestStarted**
-  - **CDF.Artifact.TestEnded**  
-    - TestPassed
-  - **CDF.Artifact.Built**
+
+### **CDF.Artifact.TestStarted** Event
+
+### **CDF.Artifact.TestEnded** Event 
+    - Result
+
+### **CDF.Artifact.Built** Event 
     - SHA 
-  - **CDF.Artifact.VersionUpdated**
+### **CDF.Artifact.VersionUpdated** Event
     - OldVersion
     - NewVersion
-  - **CDF.Artifact.Released**
+### **CDF.Artifact.Released** Event
     - URL
     - Kind
       - Library
       - Service
-## CDF Container Events
-- Base
+      
+      
+## Container Events
+- Base Properties
   - Name
   - Organization
   - Tag
   - Repository
-- Lifecycle Events
-  - **CDF.Container.Built**
-  - **CDF.Container.Released**
+
+### **CDF.Container.Built** Event
+
+### **CDF.Container.Released** Event
   
-## CDF Service Events
-- Base
+## Service Events
+- Base Properties
   - Name
   - Url
   - Version
   - Environment URL
-- Lifecycle Events
-  - **CDF.Service.Deployed**
-  - **CDF.Service.Upgraded**
 
-## CDF Environment Events
-- Base
+### **CDF.Service.Deployed** Event
+
+### **CDF.Service.Upgraded** Event
+
+## Environment Events
+- Base Properties
   - URL
   - Repository
   - Name
-- Lifecycle Events
-  - **CDF.Environment.Created**
-  - **CDF.Environment.Updated**
-  - **CDF.Environment.ServicePromoted**
 
+### **CDF.Environment.Created**
 
-## Visualization
+### **CDF.Environment.Updated**
+
+### **CDF.Environment.ServicePromoted**
+
+# Metrics
+(TBD)
+
+# Visualization
+
 (TBD)
 
