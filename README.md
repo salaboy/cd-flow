@@ -41,7 +41,7 @@ Example: `./cdf issue updated --id 7 --repository my-project`
 
 Example: `./cdf issue commented --id 7 --repository my-project --comment "new comment"`
 
-### **CDF.Issue.Closed** Event
+### **CDF.Issue.Closed** Event
 
 Example: `./cdf issue closed --id 7 --repository my-project`
 
@@ -83,6 +83,12 @@ Example: `./cdf repo pr comment --id 7 --repository my-project`
 #### **CDF.Repository.Main.Changed** Event
 
 ### Tags Events
+
+
+
+
+
+
 
 
 #### **CDF.Repository.Tag.Created** Event
