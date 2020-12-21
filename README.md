@@ -53,11 +53,16 @@ Use `cdf repo --help`
 - Base Properties
   - Name
   - Url 
-  
 
-### Pull Request Events
+### **CDF.Repository.Created** Event 
 
-Use `cdf repo pr --help`
+### **CDF.Repository.Deleted** Event 
+
+
+
+## Pull Request Events
+
+Use `cdf pr --help`
 
 - Base Properties    
     - PR Id (required)
@@ -66,32 +71,47 @@ Use `cdf repo pr --help`
     - PR Title
 
 
-#### **CDF.Repository.PR.Created** Event
+### **CDF.Repository.PR.Created** Event
 
 Example: `./cdf repo pr created --id 7 --repository my-project`
 
-#### **CDF.Repository.PR.Merged** Event
+### **CDF.Repository.PR.Merged** Event
 
 Example: `./cdf repo pr merged --id 7 --repository my-project`
 
-#### **CDF.Repository.PR.CommentAdded** Event
+### **CDF.Repository.PR.CommentAdded** Event
 
 Example: `./cdf repo pr comment --id 7 --repository my-project`
 
-### Main Events
 
-#### **CDF.Repository.Main.Changed** Event
+## CDF Branch Events
 
-### Tags Events
+Use `cdf branch --help`
+
+- Base Properties
+  - Repository
+  - Url 
+
+### **CDF.Branch.Created** Event 
+
+### **CDF.Branch.Deleted** Event 
 
 
+## CDF Tag Events
+
+Use `cdf tag --help`
+
+- Base Properties
+  - Repository
+  - Url 
+
+### **CDF.Tag.Created** Event 
+
+### **CDF.Tag.Deleted** Event 
+
+## Pipeline Events
 
 
-
-
-
-
-#### **CDF.Repository.Tag.Created** Event
 
 ## CDF Artifact Events
 - Base
