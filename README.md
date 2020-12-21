@@ -14,7 +14,7 @@ The following events are currently supported:
   - [Pull Request Events]()
   - [Branch Events]()
   - [Tag Events]()
-- [Pipeline Evnets]()  
+- [Pipeline Events]()  
   - [Artifact Events]()
   - [Container Events]()
 - [Environment Events]()
@@ -51,9 +51,7 @@ Use `cdf issue --help`
 
 Example: `./cdf issue created --id 7 --repository my-project --title "new issue" --author salaboy`
 
-
 ### **CDF.Issue.Updated** Event
-
 
 Example: `./cdf issue updated --id 7 --repository my-project`
 
@@ -64,9 +62,6 @@ Example: `./cdf issue commented --id 7 --repository my-project --comment "new co
 ### **CDF.Issue.Closed** Event
 
 Example: `./cdf issue closed --id 7 --repository my-project`
-
-
-
 
 
 ## Pull Request Events
@@ -80,17 +75,17 @@ Use `cdf pr --help`
     - PR Title
 
 
-### **CDF.Repository.PR.Created** Event
+### **CDF.PR.Created** Event
 
-Example: `./cdf repo pr created --id 7 --repository my-project`
+Example: `./cdf pr created --id 7 --repository my-project`
 
-### **CDF.Repository.PR.Merged** Event
+### **CDF.PR.Merged** Event
 
-Example: `./cdf repo pr merged --id 7 --repository my-project`
+Example: `./cdf pr merged --id 7 --repository my-project`
 
-### **CDF.Repository.PR.CommentAdded** Event
+### **CDF.PR.CommentAdded** Event
 
-Example: `./cdf repo pr comment --id 7 --repository my-project`
+Example: `./cdf pr commented --id 7 --repository my-project`
 
 
 ## CDF Branch Events
@@ -99,12 +94,16 @@ Use `cdf branch --help`
 
 - Base Properties
   - Repository
+  - Name
   - Url 
 
-### **CDF.Branch.Created** Event 
+### **CDF.Branch.Created** Event 
 
-### **CDF.Branch.Deleted** Event 
+Example: `./cdf branch created --name my-branch --repository my-project`
 
+### **CDF.Branch.Deleted** Event 
+
+Example: `./cdf branch deleted --name my-branch --repository my-project`
 
 ## CDF Tag Events
 
@@ -112,15 +111,38 @@ Use `cdf tag --help`
 
 - Base Properties
   - Repository
+  - Name
   - Url 
 
-### **CDF.Tag.Created** Event 
+### **CDF.Tag.Created** Event 
 
-### **CDF.Tag.Deleted** Event 
+Example: `./cdf tag created --name 0.0.1 --repository my-project`
+
+### **CDF.Tag.Deleted** Event 
+
+Example: `./cdf tag deleted --name 0.0.1 --repository my-project`
+
 
 ## Pipeline Events
 
+Use `cdf pipeline --help`
 
+- Base Properties
+  - Id
+  - Name
+  - Repository
+
+### **CDF.Pipeline.Started** Event
+
+Example: `./cdf pipeline started --name my-service-pipeline --id <UUID> --repository my-project`
+
+### **CDF.Pipeline.Finished** Event
+
+Example: `./cdf pipeline finished --name my-service-pipeline --id <UUID> --repository my-project`
+
+### **CDF.Pipeline.Failed** Event
+
+Example: `./cdf pipeline failed --name my-service-pipeline --id <UUID> --repository my-project`
 
 ## CDF Artifact Events
 - Base
