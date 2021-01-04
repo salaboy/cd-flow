@@ -4,7 +4,7 @@ Simple framework and binary to emit Cloud Events related to Continuous Delivery.
 
 The idea behind this framework and command-line interface is to empower you  emitting events related to a Continuous Delivery flow to measure performance and gain visibility of your processes. 
 
-This project can be used from a command-line interface, for example to integrate with your existing pipelines, or using the docker image provided to add a task to a container based pipeline such as http://tekton.dev
+![Concepts](cdf-flow-concepts.png)
 
 ## Usage
 
@@ -20,17 +20,22 @@ Integrate with your existing pipelines, repositories, and environments.
 
 Use `cdf --help`
 
-The following events are currently supported:
-- [Repository Events](https://github.com/salaboy/cd-flow/#cdf-repository-events)
-  - [Issue Events](https://github.com/salaboy/cd-flow/#cdf-issue-events)
-  - [Pull Request Events](https://github.com/salaboy/cd-flow/#pull-request-events)
-  - [Branch Events](https://github.com/salaboy/cd-flow/#cdf-branch-events)
-  - [Tag Events](https://github.com/salaboy/cd-flow/#cdf-tag-events)
-- [Pipeline Events](https://github.com/salaboy/cd-flow/#pipeline-events)  
-  - [Artifact Events](https://github.com/salaboy/cd-flow/#artifact-events)
-  - [Container Events](https://github.com/salaboy/cd-flow/#container-events)
+The following events are supported:
+- [Project Events]()
+  - [Module Events]()
+    - [Repository Events](https://github.com/salaboy/cd-flow/#cdf-repository-events)
+      - [Issue Events](https://github.com/salaboy/cd-flow/#cdf-issue-events)
+      - [Pull Request Events](https://github.com/salaboy/cd-flow/#pull-request-events)
+      - [Branch Events](https://github.com/salaboy/cd-flow/#cdf-branch-events)
+      - [Tag Events](https://github.com/salaboy/cd-flow/#cdf-tag-events)
 - [Environment Events](https://github.com/salaboy/cd-flow/#environment-events)
-  - [Service Events](https://github.com/salaboy/cd-flow/#service-events)
+  - [Application Events]()
+    - [Service Events](https://github.com/salaboy/cd-flow/#service-events)
+      - [Pipeline Events](https://github.com/salaboy/cd-flow/#pipeline-events)  
+        - [Artifact Events](https://github.com/salaboy/cd-flow/#artifact-events)
+        - [Container Events](https://github.com/salaboy/cd-flow/#container-events)
+
+
 - [Infrastructure Events]()  
 
 
@@ -220,10 +225,43 @@ Use `cdf artifact --help`
 
 ### **CDF.Service.Upgraded** Event
 
+# Example Flow
+
+The following events exemplify a flow and it's different sections:
+- **Project Detected/Registered**
+  - CDF.Project.Pipeline.Started -> Main objective is to build, test and release an artifact
+    - CDF.Project.Artifact.Built
+    - CDF.Project.Artifact.TestStarted
+    - CDF.Project.Artifact.TestEnded
+    - CDF.Project.Artifact.Released
+  - CDF.Pipeline.Finished
+- **Promotion To Environment via PR**
+  - CDF.Environment.PR.Created
+  - CDF.Environment.Pipeline.Started -> Main objective is to verify the new version of the artifact and deployment descriptors
+  - CDF.Environment.Pipeline.Finished
+  - CDF.EnvironmentPR.Merged -> To Main branch
+- **Environment Upgrade using Pipelines**
+  - CDF.Environment.Pipeline.Started -> Main objective is to apply the new version deployment descriptors
+  - CDF.Environment.Pipeline.Finished
+  - CDF.Environment.Application.Service.UP
+  - CDF.Environment.Application.UP
+  
 # Metrics
-(TBD)
+- **Lead Time**
+  - **From Source to Development Environment**
+  - **From Source to QA Environment**
+  - **From Source to Production Environment**
+- **Deployment Frequency**
+  - **To Development Environment**
+  - **To QA Environment**
+  - **To Production Environment**
+- **Change Fail Rate**
+  - **Pipeline Fail**
+  - **Deployment Fail**
+  - **Issues Reported by Users**
+- **Recovery Time**  
 
 # Visualization
 
-(TBD)
+![dashboard](dashboard.png)
 
