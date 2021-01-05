@@ -5,6 +5,7 @@ import (
 	cloudevents "github.com/cloudevents/sdk-go/v2"
 	"github.com/spf13/cobra"
 	"log"
+	"time"
 )
 
 func init() {
@@ -12,6 +13,14 @@ func init() {
 	envCmd.AddCommand(envUpdatedCmd)
 	envCmd.AddCommand(envCreatedCmd)
 }
+
+var(
+	envId string
+	envTitle string
+	envRepoName string
+	envAuthor  string
+	envData map[string]string
+)
 
 var envCmd = &cobra.Command{
 	Use:   "env",
@@ -22,9 +31,9 @@ var envCmd = &cobra.Command{
 }
 
 var envUpdatedCmd = &cobra.Command{
-	Use:   "update",
-	Short: "Emit Environment Update Event",
-	Long:  `Emit Environment Update CloudEvent`,
+	Use:   "updated",
+	Short: "Emit Environment Updated Event",
+	Long:  `Emit Environment Updated CloudEvent`,
 	RunE: func(cmd *cobra.Command, args []string) error{
 		c, err := cloudevents.NewDefaultClient()
 		if err != nil {
@@ -37,10 +46,12 @@ var envUpdatedCmd = &cobra.Command{
 		event.SetID("abc-123")//Generate with UUID
 		event.SetSource("cdf-events")
 		event.SetType("CDF.Environment.Updated")
-		event.SetData(cloudevents.ApplicationJSON, map[string]string{"hello": "world"})//
+		event.SetTime(time.Now())
+
+		event.SetData(cloudevents.ApplicationJSON, envData)//
 
 		// Set a target.
-		ctx := cloudevents.ContextWithTarget(context.Background(), "http://localhost:8080/")
+		ctx := cloudevents.ContextWithTarget(context.Background(), CDF_SINK)
 
 		// Send that Event.
 		log.Println("sending event %s", event)
@@ -56,7 +67,7 @@ var envUpdatedCmd = &cobra.Command{
 }
 
 var envCreatedCmd = &cobra.Command{
-	Use:   "create",
+	Use:   "created",
 	Short: "Emit Environment Created Event",
 	Long:  `Emit Environment Created CloudEvent`,
 	RunE: func(cmd *cobra.Command, args []string) error{
@@ -71,10 +82,12 @@ var envCreatedCmd = &cobra.Command{
 		event.SetID("abc-123")//Generate with UUID
 		event.SetSource("cdf-events")
 		event.SetType("CDF.Environment.Created")
-		event.SetData(cloudevents.ApplicationJSON, map[string]string{"hello": "world"})//
+		event.SetTime(time.Now())
+
+		event.SetData(cloudevents.ApplicationJSON, envData)//
 
 		// Set a target.
-		ctx := cloudevents.ContextWithTarget(context.Background(), "http://localhost:8080/")
+		ctx := cloudevents.ContextWithTarget(context.Background(), CDF_SINK)
 
 		// Send that Event.
 		log.Println("sending event %s", event)

@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	cloudevents "github.com/cloudevents/sdk-go/v2"
+	uuid "github.com/satori/go.uuid"
 	"github.com/spf13/cobra"
 	"log"
 	"time"
@@ -18,8 +19,11 @@ func init() {
 	pipelineCmd.PersistentFlags().StringVarP(&pipelineId, "id", "i", "", "Pipeline's Id")
 	pipelineCmd.PersistentFlags().StringVarP(&pipelineName, "name", "n", "", "Pipeline's Name")
 	pipelineCmd.PersistentFlags().StringVarP(&pipelineRepoName, "repository", "r", "", "Pipeline's Repository")
+	pipelineCmd.PersistentFlags().StringVarP(&pipelineRepoBranch, "branch", "b", "", "Pipeline's Repository Branch")
+	pipelineCmd.PersistentFlags().StringVarP(&pipelineType, "type", "t", "", "Pipeline's Type: Project / Environment")
+	pipelineCmd.PersistentFlags().StringVarP(&pipelineProjectName, "project", "p", "", "Pipeline's Project Name")
+	pipelineCmd.PersistentFlags().StringVarP(&pipelineEnvName, "env", "e", "", "Pipeline's Environment Name")
 	pipelineCmd.PersistentFlags().StringToStringVarP(&pipelineData, "data", "d", map[string]string{}, "Pipeline's Data")
-
 
 }
 
@@ -27,6 +31,10 @@ var(
 	pipelineId string
 	pipelineName string
 	pipelineRepoName string
+	pipelineRepoBranch string
+	pipelineType string //project/environment
+	pipelineProjectName string
+	pipelineEnvName string
 	pipelineData map[string]string
 )
 
@@ -36,8 +44,6 @@ var pipelineCmd = &cobra.Command{
 	Long:  `Emit Pipeline related CloudEvents`,
 
 }
-
-
 
 var pipelineStartedCmd = &cobra.Command{
 	Use:   "started",
@@ -52,7 +58,7 @@ var pipelineStartedCmd = &cobra.Command{
 
 		// Create an Event.
 		event :=  cloudevents.NewEvent()
-		event.SetID("abc-123")//Generate with UUID
+		event.SetID(uuid.NewV4().String())
 		event.SetSource("cdf-events")
 		event.SetType("CDF.Pipeline.Started")
 		event.SetTime(time.Now())
@@ -91,7 +97,7 @@ var pipelineFinishedCmd = &cobra.Command{
 
 		// Create an Event.
 		event :=  cloudevents.NewEvent()
-		event.SetID("abc-123")//Generate with UUID
+		event.SetID(uuid.NewV4().String())
 		event.SetSource("cdf-events")
 		event.SetType("CDF.Pipeline.Finished")
 		event.SetTime(time.Now())
@@ -129,7 +135,7 @@ var pipelineFailedCmd = &cobra.Command{
 
 		// Create an Event.
 		event :=  cloudevents.NewEvent()
-		event.SetID("abc-123")//Generate with UUID
+		event.SetID(uuid.NewV4().String())
 		event.SetSource("cdf-events")
 		event.SetType("CDF.Pipeline.Failed")
 		event.SetTime(time.Now())
@@ -158,16 +164,20 @@ var pipelineFailedCmd = &cobra.Command{
 func setExtensionForPipelineEvents(event cloudevents.Event ) {
 	event.SetExtension("cdfpipelineid", pipelineId)
 	event.SetExtension("cdfpipelinename", pipelineName)
+	event.SetExtension("cdfpipelinetype", pipelineType)
+	event.SetExtension("cdfpipelineprojectname", pipelineProjectName)
+	event.SetExtension("cdfpipelineenvname", pipelineEnvName)
 	event.SetExtension("cdfpipelinerepository", pipelineRepoName)
-
-
-
+	event.SetExtension("cdfpipelinerepositorybranch", pipelineRepoBranch)
 
 	var extension = map[string]string{
 		"cdfpipelineid": pipelineId,
 		"cdfpipelinename":  pipelineName,
+		"cdfpipelinetype": pipelineType,
+		"cdfpipelineprojectname": pipelineProjectName,
+		"cdfpipelineenvname": pipelineEnvName,
 		"cdfpipelinerepository":  pipelineRepoName,
-
+		"cdfpipelinerepositorybranch": pipelineRepoBranch,
 	}
 
 	bytes, err := json.Marshal(extension)

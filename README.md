@@ -39,8 +39,29 @@ The following events are supported:
 - [Infrastructure Events]()  
 
 
+# CDF Project Events
 
-# CDF Repository Events
+Use `cdf project --help`
+
+- Base Properties
+  - Name
+ 
+### **CDF.Project.Created** Event
+
+Example: `./cdf project created --name my-project` 
+
+### **CDF.Project.Deleted** Event
+
+Example: `./cdf project deleted --name my-project`
+
+## CDF Module Events
+
+Use `cdf module --help`
+
+- Base Properties
+  - Name
+
+## CDF Repository Events
 
 Use `cdf repo --help`
 
@@ -229,22 +250,25 @@ Use `cdf artifact --help`
 
 The following events exemplify a flow and it's different sections:
 - **Project Detected/Registered**
-  - CDF.Project.Pipeline.Started -> Main objective is to build, test and release an artifact
-    - CDF.Project.Artifact.Built
-    - CDF.Project.Artifact.TestStarted
-    - CDF.Project.Artifact.TestEnded
-    - CDF.Project.Artifact.Released
-  - CDF.Pipeline.Finished
+  - (Optional it can be inferred) CDF.Project.Created `./cdf project created --name my-project`
+  - (Optional it can be inferred) CDF.Module.Created  `./cdf module created --name my-module --project my-project`
+    - CDF.Pipeline.Started -> Main objective is to build, test and release an artifact. This pipeline is project scoped. ``
+      - CDF.Project.Artifact.Built
+      - CDF.Project.Artifact.TestStarted
+      - CDF.Project.Artifact.TestEnded
+      - CDF.Project.Artifact.Released
+    - CDF.Pipeline.Finished
+  
 - **Promotion To Environment via PR**
   - CDF.Environment.PR.Created
-  - CDF.Environment.Pipeline.Started -> Main objective is to verify the new version of the artifact and deployment descriptors
-  - CDF.Environment.Pipeline.Finished
+  - CDF.Pipeline.Started -> Main objective is to verify the new version of the artifact and deployment descriptors. This pipeline is environment scoped
+  - CDF.Pipeline.Finished
   - CDF.EnvironmentPR.Merged -> To Main branch
 - **Environment Upgrade using Pipelines**
-  - CDF.Environment.Pipeline.Started -> Main objective is to apply the new version deployment descriptors
-  - CDF.Environment.Pipeline.Finished
-  - CDF.Environment.Application.Service.UP
-  - CDF.Environment.Application.UP
+  - CDF.Pipeline.Started -> Main objective is to apply the new version deployment descriptors
+  - CDF.Pipeline.Finished
+  - CDF.Application.Service.UP -> applications are scoped to environments
+  - CDF.Application.UP
   
 # Metrics
 - **Lead Time**
