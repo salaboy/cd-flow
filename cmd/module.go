@@ -11,12 +11,13 @@ import (
 )
 
 func init() {
-	rootCmd.AddCommand(projectCmd)
-	projectCmd.AddCommand(projectCreatedCmd)
-	projectCmd.AddCommand(projectDeletedCmd)
-	projectCmd.PersistentFlags().StringVarP(&moduleName, "name", "n", "", "Module's Name")
-	projectCmd.PersistentFlags().StringVarP(&moduleProjectName, "project", "p", "", "Module Project's Name")
-	projectCmd.PersistentFlags().StringToStringVarP(&projectData, "data", "d", map[string]string{}, "Project's Data")
+	rootCmd.AddCommand(moduleCmd)
+	moduleCmd.AddCommand(moduleCreatedCmd)
+	moduleCmd.AddCommand(moduleCreatedCmd)
+	moduleCmd.PersistentFlags().StringVarP(&moduleName, "name", "n", "", "Module's Name")
+	moduleCmd.PersistentFlags().StringVarP(&moduleRepository, "repo", "r", "", "Module's Repository URL")
+	moduleCmd.PersistentFlags().StringVarP(&moduleProjectName, "project", "p", "", "Module Project's Name")
+	moduleCmd.PersistentFlags().StringToStringVarP(&moduleData, "data", "d", map[string]string{}, "Module's Data")
 }
 
 var moduleCmd = &cobra.Command{
@@ -30,6 +31,7 @@ var moduleCmd = &cobra.Command{
 var(
 	moduleName  string
 	moduleProjectName  string
+	moduleRepository  string
 	moduleData map[string]string
 )
 
@@ -111,11 +113,14 @@ var moduleDeletedCmd = &cobra.Command{
 
 func setExtensionForModuleEvents(event cloudevents.Event ) {
 	event.SetExtension("cdfmodulename", moduleName)
+	event.SetExtension("cdfmodulerepo", moduleRepository)
 	event.SetExtension("cdfmoduleprojectname", moduleProjectName)
+
 
 
 	var extension = map[string]string{
 		"cdfmodulename": moduleName,
+		"cdfmodulerepo": moduleRepository,
 		"cdfmoduleprojectname":   moduleProjectName,
 	}
 

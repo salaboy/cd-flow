@@ -1,0 +1,245 @@
+package cmd
+
+import (
+	"context"
+	"encoding/json"
+	cloudevents "github.com/cloudevents/sdk-go/v2"
+	"github.com/satori/go.uuid"
+	"github.com/spf13/cobra"
+	"log"
+	"time"
+)
+
+func init() {
+	rootCmd.AddCommand(artifactCmd)
+	artifactCmd.AddCommand(artifactBuiltCmd)
+	artifactCmd.AddCommand(artifactFailedCmd)
+	artifactCmd.AddCommand(artifactTestsStartedCmd)
+	artifactCmd.AddCommand(artifactTestsEndedCmd)
+	artifactCmd.AddCommand(artifactReleasedCmd)
+
+
+	artifactCmd.PersistentFlags().StringVarP(&artifactId, "id", "i", "", "Artifact's ID")
+	artifactCmd.PersistentFlags().StringVarP(&artifactPipelineId, "pipelineId", "p", "", "Artifact's Pipeline ID ")
+	artifactCmd.PersistentFlags().StringVarP(&artifactModuleName, "module", "m", "", "Artifact's Module Name ")
+
+	artifactCmd.PersistentFlags().StringToStringVarP(&artifactData, "data", "d", map[string]string{}, "Artifact's Data")
+}
+
+var artifactCmd = &cobra.Command{
+	Use:   "artifact",
+	Short: "Emit Artifact related Events",
+	Long:  `Emit Artifact related CloudEvent`,
+}
+
+var (
+	artifactId       string
+	artifactModuleName string
+	artifactPipelineId string
+	artifactData       map[string]string
+)
+
+var artifactBuiltCmd = &cobra.Command{
+	Use:   "built",
+	Short: "Emit Artifact Built Event",
+	Long:  `Emit Artifact Built CloudEvent`,
+	RunE: func(cmd *cobra.Command, args []string) error {
+		c, err := cloudevents.NewDefaultClient()
+		if err != nil {
+			log.Fatalf("failed to create client, %v", err)
+			return err
+		}
+
+		// Create an Event.
+		event := cloudevents.NewEvent()
+		event.SetID(uuid.NewV4().String())
+		event.SetSource("cdf-events")
+		event.SetType("CDF.Artifact.Built")
+		event.SetTime(time.Now())
+
+		setExtensionForArtifactEvents(event)
+
+		event.SetData(cloudevents.ApplicationJSON, artifactData)
+
+		// Set a target.
+		ctx := cloudevents.ContextWithTarget(context.Background(), CDF_SINK)
+
+		// Send that Event.
+		log.Println("sending event %s", event)
+
+		if result := c.Send(ctx, event); !cloudevents.IsACK(result) {
+			log.Fatalf("failed to send, %v", result)
+			return result
+		}
+
+		return nil
+	},
+}
+
+var artifactTestsStartedCmd = &cobra.Command{
+	Use:   "test-started",
+	Short: "Emit Artifact Tests Started Event",
+	Long:  `Emit Artifact Tests Started CloudEvent`,
+	RunE: func(cmd *cobra.Command, args []string) error {
+		c, err := cloudevents.NewDefaultClient()
+		if err != nil {
+			log.Fatalf("failed to create client, %v", err)
+			return err
+		}
+
+		// Create an Event.
+		event := cloudevents.NewEvent()
+		event.SetID(uuid.NewV4().String())
+		event.SetSource("cdf-events")
+		event.SetType("CDF.Artifact.TestsStarted")
+		event.SetTime(time.Now())
+
+		setExtensionForArtifactEvents(event)
+
+		event.SetData(cloudevents.ApplicationJSON, artifactData) //
+
+		// Set a target.
+		ctx := cloudevents.ContextWithTarget(context.Background(), CDF_SINK)
+
+		// Send that Event.
+		log.Println("sending event %s", event)
+
+		if result := c.Send(ctx, event); !cloudevents.IsACK(result) {
+			log.Fatalf("failed to send, %v", result)
+			return result
+		}
+
+		return nil
+	},
+}
+
+var artifactTestsEndedCmd = &cobra.Command{
+	Use:   "test-ended",
+	Short: "Emit Artifact Tests Ended Event",
+	Long:  `Emit Artifact Tests Ended CloudEvent`,
+	RunE: func(cmd *cobra.Command, args []string) error {
+		c, err := cloudevents.NewDefaultClient()
+		if err != nil {
+			log.Fatalf("failed to create client, %v", err)
+			return err
+		}
+
+		// Create an Event.
+		event := cloudevents.NewEvent()
+		event.SetID(uuid.NewV4().String())
+		event.SetSource("cdf-events")
+		event.SetType("CDF.Artifact.TestsEnded")
+		event.SetTime(time.Now())
+
+		setExtensionForArtifactEvents(event)
+
+		event.SetData(cloudevents.ApplicationJSON, artifactData) //
+
+		// Set a target.
+		ctx := cloudevents.ContextWithTarget(context.Background(), CDF_SINK)
+
+		// Send that Event.
+		log.Println("sending event %s", event)
+
+		if result := c.Send(ctx, event); !cloudevents.IsACK(result) {
+			log.Fatalf("failed to send, %v", result)
+			return result
+		}
+
+		return nil
+	},
+}
+
+var artifactReleasedCmd = &cobra.Command{
+	Use:   "released",
+	Short: "Emit Artifact Released Event",
+	Long:  `Emit Artifact Released CloudEvent`,
+	RunE: func(cmd *cobra.Command, args []string) error {
+		c, err := cloudevents.NewDefaultClient()
+		if err != nil {
+			log.Fatalf("failed to create client, %v", err)
+			return err
+		}
+
+		// Create an Event.
+		event := cloudevents.NewEvent()
+		event.SetID(uuid.NewV4().String())
+		event.SetSource("cdf-events")
+		event.SetType("CDF.Artifact.Released")
+		event.SetTime(time.Now())
+
+		setExtensionForArtifactEvents(event)
+
+		event.SetData(cloudevents.ApplicationJSON, artifactData) //
+
+		// Set a target.
+		ctx := cloudevents.ContextWithTarget(context.Background(), CDF_SINK)
+
+		// Send that Event.
+		log.Println("sending event %s", event)
+
+		if result := c.Send(ctx, event); !cloudevents.IsACK(result) {
+			log.Fatalf("failed to send, %v", result)
+			return result
+		}
+
+		return nil
+	},
+}
+
+var artifactFailedCmd = &cobra.Command{
+	Use:   "failed",
+	Short: "Emit Artifact Failed Event",
+	Long:  `Emit Artifact Failed CloudEvent`,
+	RunE: func(cmd *cobra.Command, args []string) error {
+		c, err := cloudevents.NewDefaultClient()
+		if err != nil {
+			log.Fatalf("failed to create client, %v", err)
+			return err
+		}
+
+		// Create an Event.
+		event := cloudevents.NewEvent()
+		event.SetID(uuid.NewV4().String())
+		event.SetSource("cdf-events")
+		event.SetType("CDF.Artifact.Failed")
+		event.SetTime(time.Now())
+
+		setExtensionForArtifactEvents(event)
+
+		event.SetData(cloudevents.ApplicationJSON, artifactData) //
+
+		// Set a target.
+		ctx := cloudevents.ContextWithTarget(context.Background(), CDF_SINK)
+
+		// Send that Event.
+		log.Println("sending event %s", event)
+
+		if result := c.Send(ctx, event); !cloudevents.IsACK(result) {
+			log.Fatalf("failed to send, %v", result)
+			return result
+		}
+
+		return nil
+	},
+}
+
+
+
+func setExtensionForArtifactEvents(event cloudevents.Event) {
+	event.SetExtension("cdfartifactid", artifactId)
+	event.SetExtension("cdfartifactmodule", artifactModuleName)
+	event.SetExtension("cdfartifactpipeid", artifactPipelineId)
+
+	var extension = map[string]string{
+		"cdfartifactid":   artifactId,
+		"cdfartifactmodule": artifactModuleName,
+		"cdfartifactpipeid": artifactPipelineId,
+	}
+
+	bytes, err := json.Marshal(extension)
+	if err != nil {
+		log.Fatalf("failed to marshal extension, %v", err)
+	}
+	event.SetExtension("cdf", bytes)
+}

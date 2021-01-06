@@ -18,10 +18,9 @@ func init() {
 
 	pipelineCmd.PersistentFlags().StringVarP(&pipelineId, "id", "i", "", "Pipeline's Id")
 	pipelineCmd.PersistentFlags().StringVarP(&pipelineName, "name", "n", "", "Pipeline's Name")
-	pipelineCmd.PersistentFlags().StringVarP(&pipelineRepoName, "repository", "r", "", "Pipeline's Repository")
-	pipelineCmd.PersistentFlags().StringVarP(&pipelineRepoBranch, "branch", "b", "", "Pipeline's Repository Branch")
-	pipelineCmd.PersistentFlags().StringVarP(&pipelineType, "type", "t", "", "Pipeline's Type: Project / Environment")
-	pipelineCmd.PersistentFlags().StringVarP(&pipelineProjectName, "project", "p", "", "Pipeline's Project Name")
+	pipelineCmd.PersistentFlags().StringVarP(&pipelineBranch, "branch", "b", "", "Pipeline's Branch")
+	pipelineCmd.PersistentFlags().StringVarP(&pipelineType, "type", "t", "", "Pipeline's Type: Module / Environment")
+	pipelineCmd.PersistentFlags().StringVarP(&pipelineModuleName, "module", "p", "", "Pipeline's Module Name")
 	pipelineCmd.PersistentFlags().StringVarP(&pipelineEnvName, "env", "e", "", "Pipeline's Environment Name")
 	pipelineCmd.PersistentFlags().StringToStringVarP(&pipelineData, "data", "d", map[string]string{}, "Pipeline's Data")
 
@@ -30,10 +29,9 @@ func init() {
 var(
 	pipelineId string
 	pipelineName string
-	pipelineRepoName string
-	pipelineRepoBranch string
-	pipelineType string //project/environment
-	pipelineProjectName string
+	pipelineBranch string
+	pipelineType string //module/environment
+	pipelineModuleName string
 	pipelineEnvName string
 	pipelineData map[string]string
 )
@@ -162,22 +160,20 @@ var pipelineFailedCmd = &cobra.Command{
 
 
 func setExtensionForPipelineEvents(event cloudevents.Event ) {
-	event.SetExtension("cdfpipelineid", pipelineId)
-	event.SetExtension("cdfpipelinename", pipelineName)
-	event.SetExtension("cdfpipelinetype", pipelineType)
-	event.SetExtension("cdfpipelineprojectname", pipelineProjectName)
-	event.SetExtension("cdfpipelineenvname", pipelineEnvName)
-	event.SetExtension("cdfpipelinerepository", pipelineRepoName)
-	event.SetExtension("cdfpipelinerepositorybranch", pipelineRepoBranch)
+	event.SetExtension("cdfpipeid", pipelineId)
+	event.SetExtension("cdfpipename", pipelineName)
+	event.SetExtension("cdfpipetype", pipelineType)
+	event.SetExtension("cdfpipemodulename", pipelineModuleName)
+	event.SetExtension("cdfpipeenvname", pipelineEnvName)
+	event.SetExtension("cdfpipebranch", pipelineBranch)
 
 	var extension = map[string]string{
-		"cdfpipelineid": pipelineId,
-		"cdfpipelinename":  pipelineName,
-		"cdfpipelinetype": pipelineType,
-		"cdfpipelineprojectname": pipelineProjectName,
-		"cdfpipelineenvname": pipelineEnvName,
-		"cdfpipelinerepository":  pipelineRepoName,
-		"cdfpipelinerepositorybranch": pipelineRepoBranch,
+		"cdfpipeid": pipelineId,
+		"cdfpipename":  pipelineName,
+		"cdfpipetype": pipelineType,
+		"cdfpipemodulename": pipelineModuleName,
+		"cdfpipeenvname": pipelineEnvName,
+		"cdfpipebranch": pipelineBranch,
 	}
 
 	bytes, err := json.Marshal(extension)

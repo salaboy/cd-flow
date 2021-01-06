@@ -251,13 +251,13 @@ Use `cdf artifact --help`
 The following events exemplify a flow and it's different sections:
 - **Project Detected/Registered**
   - (Optional it can be inferred) CDF.Project.Created `./cdf project created --name my-project`
-  - (Optional it can be inferred) CDF.Module.Created  `./cdf module created --name my-module --project my-project`
-    - CDF.Pipeline.Started -> Main objective is to build, test and release an artifact. This pipeline is project scoped. ``
-      - CDF.Project.Artifact.Built
-      - CDF.Project.Artifact.TestStarted
-      - CDF.Project.Artifact.TestEnded
-      - CDF.Project.Artifact.Released
-    - CDF.Pipeline.Finished
+  - (Optional it can be inferred) CDF.Module.Created  `./cdf module created --name my-module --project my-project --repo http://github.com/salaboy/my-module`
+    - CDF.Pipeline.Started -> Main objective is to build, test and release an artifact. This pipeline is project scoped. `./cdf pipeline started --type module --module my-module --id 1`
+      - CDF.Artifact.Built `./cdf artifact built --module my-module --pipelineId 1 --id my-artifact-id`
+      - CDF.Artifact.TestsStarted `./cdf artifact test-started --module my-module --pipelineId 1 --id my-artifact-id`
+      - CDF.Artifact.TestsEnded  `./cdf artifact test-ended --module my-module --pipelineId 1 --id my-artifact-id`
+      - CDF.Artifact.Released  `./cdf artifact released --module my-module --pipelineId 1 --id my-artifact-id`
+    - CDF.Pipeline.Finished `./cdf pipeline finished --type module --module my-module --id 1`
   
 - **Promotion To Environment via PR**
   - CDF.Environment.PR.Created

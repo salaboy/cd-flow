@@ -14,6 +14,7 @@ func init() {
 	rootCmd.AddCommand(projectCmd)
 	projectCmd.AddCommand(projectCreatedCmd)
 	projectCmd.AddCommand(projectDeletedCmd)
+
 	projectCmd.PersistentFlags().StringVarP(&projectName, "name", "n", "", "Project's Name")
 	projectCmd.PersistentFlags().StringToStringVarP(&projectData, "data", "d", map[string]string{}, "Project's Data")
 }
