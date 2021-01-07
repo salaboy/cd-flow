@@ -111,7 +111,6 @@ var projectDeletedCmd = &cobra.Command{
 func setExtensionForProjectEvents(event cloudevents.Event ) {
 	event.SetExtension("cdfprojectname", projectName)
 
-
 	var extension = map[string]string{
 		"cdfprojectname":   projectName,
 	}
