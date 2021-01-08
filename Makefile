@@ -66,16 +66,16 @@ build: $(GO_DEPENDENCIES) clean
 	CGO_ENABLED=$(CGO_ENABLED) $(GO) $(BUILD_TARGET) $(BUILDFLAGS) -o build/$(NAME) $(MAIN_SRC_FILE)
 
 test: ## Run tests with the "unit" build tag
-	CGO_ENABLED=$(CGO_ENABLED) $(GOTEST) --tags=unit -failfast -short ./... $(TEST_BUILDFLAGS)
+	#CGO_ENABLED=$(CGO_ENABLED) $(GOTEST) --tags=unit -failfast -short ./... $(TEST_BUILDFLAGS)
 
-test-coverage : make-reports-dir ## Run tests and coverage for all tests with the "unit" build tag
-	CGO_ENABLED=$(CGO_ENABLED) $(GOTEST) --tags=unit $(COVERFLAGS) -failfast -short ./... $(TEST_BUILDFLAGS)
-
-test-report: make-reports-dir get-test-deps test-coverage ## Create the test report
-	@gocov convert $(COVER_OUT) | gocov report
-
-test-report-html: make-reports-dir get-test-deps test-coverage ## Create the test report in HTML format
-	@gocov convert $(COVER_OUT) | gocov-html > $(REPORTS_DIR)/cover.html && open $(REPORTS_DIR)/cover.html
+#test-coverage : make-reports-dir ## Run tests and coverage for all tests with the "unit" build tag
+#	CGO_ENABLED=$(CGO_ENABLED) $(GOTEST) --tags=unit $(COVERFLAGS) -failfast -short ./... $(TEST_BUILDFLAGS)
+#
+#test-report: make-reports-dir get-test-deps test-coverage ## Create the test report
+#	@gocov convert $(COVER_OUT) | gocov report
+#
+#test-report-html: make-reports-dir get-test-deps test-coverage ## Create the test report in HTML format
+#	@gocov convert $(COVER_OUT) | gocov-html > $(REPORTS_DIR)/cover.html && open $(REPORTS_DIR)/cover.html
 
 install: $(GO_DEPENDENCIES) ## Install the binary
 	GOBIN=${GOPATH}/bin $(GO) install $(BUILDFLAGS) $(MAIN_SRC_FILE)
