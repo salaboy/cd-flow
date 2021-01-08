@@ -3,10 +3,11 @@ package cmd
 import (
 	"context"
 	"encoding/json"
-	cloudevents "github.com/cloudevents/sdk-go/v2"
-	"github.com/spf13/cobra"
 	"log"
 	"time"
+
+	cloudevents "github.com/cloudevents/sdk-go/v2"
+	"github.com/spf13/cobra"
 )
 
 func init() {
@@ -20,32 +21,27 @@ func init() {
 	prCmd.PersistentFlags().StringVarP(&prRepoName, "repository", "r", "", "PR's Repository")
 	prCmd.PersistentFlags().StringVarP(&prAuthor, "author", "a", "", "PR's Author")
 	prCmd.PersistentFlags().StringToStringVarP(&prData, "data", "d", map[string]string{}, "PR's Data")
-
-
 }
 
-var(
-	prId string
-	prTitle string
+var (
+	prId       string
+	prTitle    string
 	prRepoName string
-	prAuthor  string
-	prData map[string]string
+	prAuthor   string
+	prData     map[string]string
 )
 
 var prCmd = &cobra.Command{
 	Use:   "pr",
 	Short: "Pull Request Events",
 	Long:  `Emit PR related CloudEvents`,
-
 }
-
-
 
 var prCreatedCmd = &cobra.Command{
 	Use:   "created",
 	Short: "Emit Pull Request Created Event",
 	Long:  `Emit Pull Request Created CloudEvent`,
-	RunE: func(cmd *cobra.Command, args []string) error{
+	RunE: func(cmd *cobra.Command, args []string) error {
 		c, err := cloudevents.NewDefaultClient()
 		if err != nil {
 			log.Fatalf("failed to create client, %v", err)
@@ -53,21 +49,21 @@ var prCreatedCmd = &cobra.Command{
 		}
 
 		// Create an Event.
-		event :=  cloudevents.NewEvent()
-		event.SetID("abc-123")//Generate with UUID
+		event := cloudevents.NewEvent()
+		event.SetID("abc-123") //Generate with UUID
 		event.SetSource("cdf-events")
 		event.SetType("CDF.PR.Created")
 		event.SetTime(time.Now())
 
 		setExtensionForPREvents(event)
 
-		event.SetData(cloudevents.ApplicationJSON, prData)//
+		event.SetData(cloudevents.ApplicationJSON, prData) //
 
 		// Set a target.
 		ctx := cloudevents.ContextWithTarget(context.Background(), CDF_SINK)
 
 		// Send that Event.
-		log.Println("sending event %s", event)
+		log.Printf("sending event %s\n", event)
 
 		if result := c.Send(ctx, event); !cloudevents.IsACK(result) {
 			log.Fatalf("failed to send, %v", result)
@@ -76,15 +72,13 @@ var prCreatedCmd = &cobra.Command{
 
 		return nil
 	},
-
 }
-
 
 var prMergedCmd = &cobra.Command{
 	Use:   "merged",
 	Short: "Emit Pull Request Merged Event",
 	Long:  `Emit Pull Request Merged CloudEvent`,
-	RunE: func(cmd *cobra.Command, args []string) error{
+	RunE: func(cmd *cobra.Command, args []string) error {
 		c, err := cloudevents.NewDefaultClient()
 		if err != nil {
 			log.Fatalf("failed to create client, %v", err)
@@ -92,21 +86,21 @@ var prMergedCmd = &cobra.Command{
 		}
 
 		// Create an Event.
-		event :=  cloudevents.NewEvent()
-		event.SetID("abc-123")//Generate with UUID
+		event := cloudevents.NewEvent()
+		event.SetID("abc-123") //Generate with UUID
 		event.SetSource("cdf-events")
 		event.SetType("CDF.PR.Merged")
 		event.SetTime(time.Now())
 
 		setExtensionForPREvents(event)
 
-		event.SetData(cloudevents.ApplicationJSON, prData)//
+		event.SetData(cloudevents.ApplicationJSON, prData) //
 
 		// Set a target.
 		ctx := cloudevents.ContextWithTarget(context.Background(), CDF_SINK)
 
 		// Send that Event.
-		log.Println("sending event %s", event)
+		log.Printf("sending event %s\n", event)
 
 		if result := c.Send(ctx, event); !cloudevents.IsACK(result) {
 			log.Fatalf("failed to send, %v", result)
@@ -115,14 +109,13 @@ var prMergedCmd = &cobra.Command{
 
 		return nil
 	},
-
 }
 
 var prClosedCmd = &cobra.Command{
 	Use:   "closed",
 	Short: "Emit Pull Request Closed Event",
 	Long:  `Emit Pull Request Closed CloudEvent`,
-	RunE: func(cmd *cobra.Command, args []string) error{
+	RunE: func(cmd *cobra.Command, args []string) error {
 		c, err := cloudevents.NewDefaultClient()
 		if err != nil {
 			log.Fatalf("failed to create client, %v", err)
@@ -130,21 +123,21 @@ var prClosedCmd = &cobra.Command{
 		}
 
 		// Create an Event.
-		event :=  cloudevents.NewEvent()
-		event.SetID("abc-123")//Generate with UUID
+		event := cloudevents.NewEvent()
+		event.SetID("abc-123") //Generate with UUID
 		event.SetSource("cdf-events")
 		event.SetType("CDF.PR.Closed")
 		event.SetTime(time.Now())
 
 		setExtensionForPREvents(event)
 
-		event.SetData(cloudevents.ApplicationJSON, prData)//
+		event.SetData(cloudevents.ApplicationJSON, prData) //
 
 		// Set a target.
 		ctx := cloudevents.ContextWithTarget(context.Background(), CDF_SINK)
 
 		// Send that Event.
-		log.Println("sending event %s", event)
+		log.Printf("sending event %s\n", event)
 
 		if result := c.Send(ctx, event); !cloudevents.IsACK(result) {
 			log.Fatalf("failed to send, %v", result)
@@ -153,24 +146,19 @@ var prClosedCmd = &cobra.Command{
 
 		return nil
 	},
-
 }
 
-
-func setExtensionForPREvents(event cloudevents.Event ) {
+func setExtensionForPREvents(event cloudevents.Event) {
 	event.SetExtension("cdfprid", prId)
 	event.SetExtension("cdfprrepository", prRepoName)
 	event.SetExtension("cdfprauthor", prAuthor)
 	event.SetExtension("cdfprtitle", prTitle)
 
-
-
 	var extension = map[string]string{
-		"cdfprid": prId,
-		"cdfprrepository":  prRepoName,
-		"cdfprauthor":  prAuthor,
-		"cdfprtitle":  prTitle,
-
+		"cdfprid":         prId,
+		"cdfprrepository": prRepoName,
+		"cdfprauthor":     prAuthor,
+		"cdfprtitle":      prTitle,
 	}
 
 	bytes, err := json.Marshal(extension)

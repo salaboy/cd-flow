@@ -3,22 +3,20 @@ package cmd
 import (
 	"context"
 	"encoding/json"
-	cloudevents "github.com/cloudevents/sdk-go/v2"
-	"github.com/spf13/cobra"
 	"log"
 	"time"
+
+	cloudevents "github.com/cloudevents/sdk-go/v2"
+	"github.com/spf13/cobra"
 )
-
-
 
 var issueCmd = &cobra.Command{
 	Use:   "issue",
 	Short: "Emit Issues related Events",
 	Long:  `Emit Issues related CloudEvent`,
-
 }
 
-var(
+var (
 	issueId         string
 	issueTitle      string
 	issueAuthor     string
@@ -43,15 +41,11 @@ func init() {
 	issueCommentedCmd.Flags().StringVarP(&issueComment, "comment", "c", "", "Issue's Comment")
 }
 
-
-
-
-
 var issueCreatedCmd = &cobra.Command{
 	Use:   "created",
 	Short: "Emit Issue Created Event",
 	Long:  `Emit Issue Created CloudEvent`,
-	RunE: func(cmd *cobra.Command, args []string) error{
+	RunE: func(cmd *cobra.Command, args []string) error {
 		c, err := cloudevents.NewDefaultClient()
 		if err != nil {
 			log.Fatalf("failed to create client, %v", err)
@@ -59,8 +53,8 @@ var issueCreatedCmd = &cobra.Command{
 		}
 
 		// Create an Event.
-		event :=  cloudevents.NewEvent()
-		event.SetID("abc-123")//Generate with UUID
+		event := cloudevents.NewEvent()
+		event.SetID("abc-123") //Generate with UUID
 		event.SetSource("cdf-events")
 		event.SetType("CDF.Issue.Created")
 		event.SetTime(time.Now())
@@ -72,7 +66,7 @@ var issueCreatedCmd = &cobra.Command{
 		ctx := cloudevents.ContextWithTarget(context.Background(), CDF_SINK)
 
 		// Send that Event.
-		log.Println("sending event %s", event)
+		log.Printf("sending event %s\n", event)
 
 		if result := c.Send(ctx, event); !cloudevents.IsACK(result) {
 			log.Fatalf("failed to send, %v", result)
@@ -83,7 +77,7 @@ var issueCreatedCmd = &cobra.Command{
 	},
 }
 
-func setExtensionForIssueEvents(event cloudevents.Event ) {
+func setExtensionForIssueEvents(event cloudevents.Event) {
 	event.SetExtension("cdfissueid", issueId)
 	event.SetExtension("cdfissuerepo", issueRepository)
 	event.SetExtension("cdfissuetitle", issueTitle)
@@ -107,7 +101,7 @@ var issueUpdatedCmd = &cobra.Command{
 	Use:   "updated",
 	Short: "Emit Issue Update Event",
 	Long:  `Emit Issue Update CloudEvent`,
-	RunE: func(cmd *cobra.Command, args []string) error{
+	RunE: func(cmd *cobra.Command, args []string) error {
 		c, err := cloudevents.NewDefaultClient()
 		if err != nil {
 			log.Fatalf("failed to create client, %v", err)
@@ -115,8 +109,8 @@ var issueUpdatedCmd = &cobra.Command{
 		}
 
 		// Create an Event.
-		event :=  cloudevents.NewEvent()
-		event.SetID("abc-123")//Generate with UUID
+		event := cloudevents.NewEvent()
+		event.SetID("abc-123") //Generate with UUID
 		event.SetSource("cdf-events")
 		event.SetType("CDF.Issue.Updated")
 		event.SetTime(time.Now())
@@ -129,7 +123,7 @@ var issueUpdatedCmd = &cobra.Command{
 		ctx := cloudevents.ContextWithTarget(context.Background(), CDF_SINK)
 
 		// Send that Event.
-		log.Println("sending event %s", event)
+		log.Printf("sending event %s\n", event)
 
 		if result := c.Send(ctx, event); !cloudevents.IsACK(result) {
 			log.Fatalf("failed to send, %v", result)
@@ -138,14 +132,13 @@ var issueUpdatedCmd = &cobra.Command{
 
 		return nil
 	},
-
 }
 
 var issueClosedCmd = &cobra.Command{
 	Use:   "closed",
 	Short: "Emit Issue Closed Event",
 	Long:  `Emit Issue Closed CloudEvent`,
-	RunE: func(cmd *cobra.Command, args []string) error{
+	RunE: func(cmd *cobra.Command, args []string) error {
 		c, err := cloudevents.NewDefaultClient()
 		if err != nil {
 			log.Fatalf("failed to create client, %v", err)
@@ -153,8 +146,8 @@ var issueClosedCmd = &cobra.Command{
 		}
 
 		// Create an Event.
-		event :=  cloudevents.NewEvent()
-		event.SetID("abc-123")//Generate with UUID
+		event := cloudevents.NewEvent()
+		event.SetID("abc-123") //Generate with UUID
 		event.SetSource("cdf-events")
 		event.SetType("CDF.Issue.Closed")
 		event.SetTime(time.Now())
@@ -167,7 +160,7 @@ var issueClosedCmd = &cobra.Command{
 		ctx := cloudevents.ContextWithTarget(context.Background(), CDF_SINK)
 
 		// Send that Event.
-		log.Println("sending event %s", event)
+		log.Printf("sending event %s\n", event)
 
 		if result := c.Send(ctx, event); !cloudevents.IsACK(result) {
 			log.Fatalf("failed to send, %v", result)
@@ -176,13 +169,12 @@ var issueClosedCmd = &cobra.Command{
 
 		return nil
 	},
-
 }
 var issueCommentedCmd = &cobra.Command{
 	Use:   "commented",
 	Short: "Emit Issue Commented Event",
 	Long:  `Emit Issue Commented CloudEvent`,
-	RunE: func(cmd *cobra.Command, args []string) error{
+	RunE: func(cmd *cobra.Command, args []string) error {
 		c, err := cloudevents.NewDefaultClient()
 		if err != nil {
 			log.Fatalf("failed to create client, %v", err)
@@ -190,8 +182,8 @@ var issueCommentedCmd = &cobra.Command{
 		}
 
 		// Create an Event.
-		event :=  cloudevents.NewEvent()
-		event.SetID("abc-123")//Generate with UUID
+		event := cloudevents.NewEvent()
+		event.SetID("abc-123") //Generate with UUID
 		event.SetSource("cdf-events")
 		event.SetType("CDF.Issue.Commented")
 		event.SetTime(time.Now())
@@ -200,13 +192,13 @@ var issueCommentedCmd = &cobra.Command{
 
 		event.SetData(cloudevents.ApplicationJSON, map[string]string{
 			"comment": issueComment,
-		})//
+		}) //
 
 		// Set a target.
 		ctx := cloudevents.ContextWithTarget(context.Background(), CDF_SINK)
 
 		// Send that Event.
-		log.Println("sending event %s", event)
+		log.Printf("sending event %s\n", event)
 
 		if result := c.Send(ctx, event); !cloudevents.IsACK(result) {
 			log.Fatalf("failed to send, %v", result)
@@ -215,5 +207,4 @@ var issueCommentedCmd = &cobra.Command{
 
 		return nil
 	},
-
 }

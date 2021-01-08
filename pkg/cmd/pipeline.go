@@ -3,11 +3,12 @@ package cmd
 import (
 	"context"
 	"encoding/json"
+	"log"
+	"time"
+
 	cloudevents "github.com/cloudevents/sdk-go/v2"
 	uuid "github.com/satori/go.uuid"
 	"github.com/spf13/cobra"
-	"log"
-	"time"
 )
 
 func init() {
@@ -26,28 +27,27 @@ func init() {
 
 }
 
-var(
-	pipelineId string
-	pipelineName string
-	pipelineBranch string
-	pipelineType string //module/environment
+var (
+	pipelineId         string
+	pipelineName       string
+	pipelineBranch     string
+	pipelineType       string //module/environment
 	pipelineModuleName string
-	pipelineEnvName string
-	pipelineData map[string]string
+	pipelineEnvName    string
+	pipelineData       map[string]string
 )
 
 var pipelineCmd = &cobra.Command{
 	Use:   "pipeline",
 	Short: "Pipeline Events",
 	Long:  `Emit Pipeline related CloudEvents`,
-
 }
 
 var pipelineStartedCmd = &cobra.Command{
 	Use:   "started",
 	Short: "Emit Pipeline Started Event",
 	Long:  `Emit Pipeline Started CloudEvent`,
-	RunE: func(cmd *cobra.Command, args []string) error{
+	RunE: func(cmd *cobra.Command, args []string) error {
 		c, err := cloudevents.NewDefaultClient()
 		if err != nil {
 			log.Fatalf("failed to create client, %v", err)
@@ -55,7 +55,7 @@ var pipelineStartedCmd = &cobra.Command{
 		}
 
 		// Create an Event.
-		event :=  cloudevents.NewEvent()
+		event := cloudevents.NewEvent()
 		event.SetID(uuid.NewV4().String())
 		event.SetSource("cdf-events")
 		event.SetType("CDF.Pipeline.Started")
@@ -63,13 +63,13 @@ var pipelineStartedCmd = &cobra.Command{
 
 		setExtensionForPipelineEvents(event)
 
-		event.SetData(cloudevents.ApplicationJSON, pipelineData)//
+		event.SetData(cloudevents.ApplicationJSON, pipelineData) //
 
 		// Set a target.
 		ctx := cloudevents.ContextWithTarget(context.Background(), CDF_SINK)
 
 		// Send that Event.
-		log.Println("sending event %s", event)
+		log.Printf("sending event %s\n", event)
 
 		if result := c.Send(ctx, event); !cloudevents.IsACK(result) {
 			log.Fatalf("failed to send, %v", result)
@@ -78,15 +78,13 @@ var pipelineStartedCmd = &cobra.Command{
 
 		return nil
 	},
-
 }
-
 
 var pipelineFinishedCmd = &cobra.Command{
 	Use:   "finished",
 	Short: "Emit Pipeline Finished Event",
 	Long:  `Emit Pipeline Finished CloudEvent`,
-	RunE: func(cmd *cobra.Command, args []string) error{
+	RunE: func(cmd *cobra.Command, args []string) error {
 		c, err := cloudevents.NewDefaultClient()
 		if err != nil {
 			log.Fatalf("failed to create client, %v", err)
@@ -94,7 +92,7 @@ var pipelineFinishedCmd = &cobra.Command{
 		}
 
 		// Create an Event.
-		event :=  cloudevents.NewEvent()
+		event := cloudevents.NewEvent()
 		event.SetID(uuid.NewV4().String())
 		event.SetSource("cdf-events")
 		event.SetType("CDF.Pipeline.Finished")
@@ -102,13 +100,13 @@ var pipelineFinishedCmd = &cobra.Command{
 
 		setExtensionForPipelineEvents(event)
 
-		event.SetData(cloudevents.ApplicationJSON, prData)//
+		event.SetData(cloudevents.ApplicationJSON, prData) //
 
 		// Set a target.
 		ctx := cloudevents.ContextWithTarget(context.Background(), CDF_SINK)
 
 		// Send that Event.
-		log.Println("sending event %s", event)
+		log.Printf("sending event %s\n", event)
 
 		if result := c.Send(ctx, event); !cloudevents.IsACK(result) {
 			log.Fatalf("failed to send, %v", result)
@@ -117,14 +115,13 @@ var pipelineFinishedCmd = &cobra.Command{
 
 		return nil
 	},
-
 }
 
 var pipelineFailedCmd = &cobra.Command{
 	Use:   "failed",
 	Short: "Emit Pipeline Failed Event",
 	Long:  `Emit Pipeline Failed CloudEvent`,
-	RunE: func(cmd *cobra.Command, args []string) error{
+	RunE: func(cmd *cobra.Command, args []string) error {
 		c, err := cloudevents.NewDefaultClient()
 		if err != nil {
 			log.Fatalf("failed to create client, %v", err)
@@ -132,7 +129,7 @@ var pipelineFailedCmd = &cobra.Command{
 		}
 
 		// Create an Event.
-		event :=  cloudevents.NewEvent()
+		event := cloudevents.NewEvent()
 		event.SetID(uuid.NewV4().String())
 		event.SetSource("cdf-events")
 		event.SetType("CDF.Pipeline.Failed")
@@ -140,13 +137,13 @@ var pipelineFailedCmd = &cobra.Command{
 
 		setExtensionForPipelineEvents(event)
 
-		event.SetData(cloudevents.ApplicationJSON, prData)//
+		event.SetData(cloudevents.ApplicationJSON, prData) //
 
 		// Set a target.
 		ctx := cloudevents.ContextWithTarget(context.Background(), CDF_SINK)
 
 		// Send that Event.
-		log.Println("sending event %s", event)
+		log.Printf("sending event %s\n", event)
 
 		if result := c.Send(ctx, event); !cloudevents.IsACK(result) {
 			log.Fatalf("failed to send, %v", result)
@@ -155,11 +152,9 @@ var pipelineFailedCmd = &cobra.Command{
 
 		return nil
 	},
-
 }
 
-
-func setExtensionForPipelineEvents(event cloudevents.Event ) {
+func setExtensionForPipelineEvents(event cloudevents.Event) {
 	event.SetExtension("cdfpipeid", pipelineId)
 	event.SetExtension("cdfpipename", pipelineName)
 	event.SetExtension("cdfpipetype", pipelineType)
@@ -168,12 +163,12 @@ func setExtensionForPipelineEvents(event cloudevents.Event ) {
 	event.SetExtension("cdfpipebranch", pipelineBranch)
 
 	var extension = map[string]string{
-		"cdfpipeid": pipelineId,
-		"cdfpipename":  pipelineName,
-		"cdfpipetype": pipelineType,
+		"cdfpipeid":         pipelineId,
+		"cdfpipename":       pipelineName,
+		"cdfpipetype":       pipelineType,
 		"cdfpipemodulename": pipelineModuleName,
-		"cdfpipeenvname": pipelineEnvName,
-		"cdfpipebranch": pipelineBranch,
+		"cdfpipeenvname":    pipelineEnvName,
+		"cdfpipebranch":     pipelineBranch,
 	}
 
 	bytes, err := json.Marshal(extension)

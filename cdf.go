@@ -1,7 +1,7 @@
 package main
 
 import (
-	"cd-flow/cmd"
+	"github.com/salaboy/cd-flow/pkg/cmd"
 )
 func main() {
 	cmd.Execute()
