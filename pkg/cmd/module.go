@@ -3,11 +3,12 @@ package cmd
 import (
 	"context"
 	"encoding/json"
-	cloudevents "github.com/cloudevents/sdk-go/v2"
-	"github.com/spf13/cobra"
-	"github.com/satori/go.uuid"
 	"log"
 	"time"
+
+	cloudevents "github.com/cloudevents/sdk-go/v2"
+	uuid "github.com/satori/go.uuid"
+	"github.com/spf13/cobra"
 )
 
 func init() {
@@ -24,22 +25,20 @@ var moduleCmd = &cobra.Command{
 	Use:   "module",
 	Short: "Emit Module related Events",
 	Long:  `Emit Module related CloudEvent`,
-
 }
 
-
-var(
-	moduleName  string
-	moduleProjectName  string
+var (
+	moduleName        string
+	moduleProjectName string
 	moduleRepository  string
-	moduleData map[string]string
+	moduleData        map[string]string
 )
 
 var moduleCreatedCmd = &cobra.Command{
 	Use:   "created",
 	Short: "Emit Module Created Event",
 	Long:  `Emit Module Created CloudEvent`,
-	RunE: func(cmd *cobra.Command, args []string) error{
+	RunE: func(cmd *cobra.Command, args []string) error {
 		c, err := cloudevents.NewDefaultClient()
 		if err != nil {
 			log.Fatalf("failed to create client, %v", err)
@@ -47,7 +46,7 @@ var moduleCreatedCmd = &cobra.Command{
 		}
 
 		// Create an Event.
-		event :=  cloudevents.NewEvent()
+		event := cloudevents.NewEvent()
 		event.SetID(uuid.NewV4().String())
 		event.SetSource("cdf-events")
 		event.SetType("CDF.Module.Created")
@@ -61,7 +60,7 @@ var moduleCreatedCmd = &cobra.Command{
 		ctx := cloudevents.ContextWithTarget(context.Background(), CDF_SINK)
 
 		// Send that Event.
-		log.Println("sending event %s", event)
+		log.Printf("sending event %s\n", event)
 
 		if result := c.Send(ctx, event); !cloudevents.IsACK(result) {
 			log.Fatalf("failed to send, %v", result)
@@ -70,14 +69,13 @@ var moduleCreatedCmd = &cobra.Command{
 
 		return nil
 	},
-
 }
 
 var moduleDeletedCmd = &cobra.Command{
 	Use:   "deleted",
 	Short: "Emit Module Deleted Event",
 	Long:  `Emit Module Deleted CloudEvent`,
-	RunE: func(cmd *cobra.Command, args []string) error{
+	RunE: func(cmd *cobra.Command, args []string) error {
 		c, err := cloudevents.NewDefaultClient()
 		if err != nil {
 			log.Fatalf("failed to create client, %v", err)
@@ -85,7 +83,7 @@ var moduleDeletedCmd = &cobra.Command{
 		}
 
 		// Create an Event.
-		event :=  cloudevents.NewEvent()
+		event := cloudevents.NewEvent()
 		event.SetID(uuid.NewV4().String())
 		event.SetSource("cdf-events")
 		event.SetType("CDF.Module.Deleted")
@@ -93,13 +91,13 @@ var moduleDeletedCmd = &cobra.Command{
 
 		setExtensionForModuleEvents(event)
 
-		event.SetData(cloudevents.ApplicationJSON, moduleData)//
+		event.SetData(cloudevents.ApplicationJSON, moduleData) //
 
 		// Set a target.
 		ctx := cloudevents.ContextWithTarget(context.Background(), CDF_SINK)
 
 		// Send that Event.
-		log.Println("sending event %s", event)
+		log.Printf("sending event %s\n", event)
 
 		if result := c.Send(ctx, event); !cloudevents.IsACK(result) {
 			log.Fatalf("failed to send, %v", result)
@@ -108,20 +106,17 @@ var moduleDeletedCmd = &cobra.Command{
 
 		return nil
 	},
-
 }
 
-func setExtensionForModuleEvents(event cloudevents.Event ) {
+func setExtensionForModuleEvents(event cloudevents.Event) {
 	event.SetExtension("cdfmodulename", moduleName)
 	event.SetExtension("cdfmodulerepo", moduleRepository)
 	event.SetExtension("cdfmoduleprojectname", moduleProjectName)
 
-
-
 	var extension = map[string]string{
-		"cdfmodulename": moduleName,
-		"cdfmodulerepo": moduleRepository,
-		"cdfmoduleprojectname":   moduleProjectName,
+		"cdfmodulename":        moduleName,
+		"cdfmodulerepo":        moduleRepository,
+		"cdfmoduleprojectname": moduleProjectName,
 	}
 
 	bytes, err := json.Marshal(extension)
@@ -130,4 +125,3 @@ func setExtensionForModuleEvents(event cloudevents.Event ) {
 	}
 	event.SetExtension("cdf", bytes)
 }
-

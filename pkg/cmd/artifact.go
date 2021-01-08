@@ -3,11 +3,12 @@ package cmd
 import (
 	"context"
 	"encoding/json"
-	cloudevents "github.com/cloudevents/sdk-go/v2"
-	"github.com/satori/go.uuid"
-	"github.com/spf13/cobra"
 	"log"
 	"time"
+
+	cloudevents "github.com/cloudevents/sdk-go/v2"
+	uuid "github.com/satori/go.uuid"
+	"github.com/spf13/cobra"
 )
 
 func init() {
@@ -17,7 +18,6 @@ func init() {
 	artifactCmd.AddCommand(artifactTestsStartedCmd)
 	artifactCmd.AddCommand(artifactTestsEndedCmd)
 	artifactCmd.AddCommand(artifactReleasedCmd)
-
 
 	artifactCmd.PersistentFlags().StringVarP(&artifactId, "id", "i", "", "Artifact's ID")
 	artifactCmd.PersistentFlags().StringVarP(&artifactPipelineId, "pipelineId", "p", "", "Artifact's Pipeline ID ")
@@ -33,7 +33,7 @@ var artifactCmd = &cobra.Command{
 }
 
 var (
-	artifactId       string
+	artifactId         string
 	artifactModuleName string
 	artifactPipelineId string
 	artifactData       map[string]string
@@ -65,7 +65,7 @@ var artifactBuiltCmd = &cobra.Command{
 		ctx := cloudevents.ContextWithTarget(context.Background(), CDF_SINK)
 
 		// Send that Event.
-		log.Println("sending event %s", event)
+		log.Printf("sending event %s\n", event)
 
 		if result := c.Send(ctx, event); !cloudevents.IsACK(result) {
 			log.Fatalf("failed to send, %v", result)
@@ -102,7 +102,7 @@ var artifactTestsStartedCmd = &cobra.Command{
 		ctx := cloudevents.ContextWithTarget(context.Background(), CDF_SINK)
 
 		// Send that Event.
-		log.Println("sending event %s", event)
+		log.Printf("sending event %s\n", event)
 
 		if result := c.Send(ctx, event); !cloudevents.IsACK(result) {
 			log.Fatalf("failed to send, %v", result)
@@ -139,7 +139,7 @@ var artifactTestsEndedCmd = &cobra.Command{
 		ctx := cloudevents.ContextWithTarget(context.Background(), CDF_SINK)
 
 		// Send that Event.
-		log.Println("sending event %s", event)
+		log.Printf("sending event %s\n", event)
 
 		if result := c.Send(ctx, event); !cloudevents.IsACK(result) {
 			log.Fatalf("failed to send, %v", result)
@@ -176,7 +176,7 @@ var artifactReleasedCmd = &cobra.Command{
 		ctx := cloudevents.ContextWithTarget(context.Background(), CDF_SINK)
 
 		// Send that Event.
-		log.Println("sending event %s", event)
+		log.Printf("sending event %s\n", event)
 
 		if result := c.Send(ctx, event); !cloudevents.IsACK(result) {
 			log.Fatalf("failed to send, %v", result)
@@ -213,7 +213,7 @@ var artifactFailedCmd = &cobra.Command{
 		ctx := cloudevents.ContextWithTarget(context.Background(), CDF_SINK)
 
 		// Send that Event.
-		log.Println("sending event %s", event)
+		log.Printf("sending event %s\n", event)
 
 		if result := c.Send(ctx, event); !cloudevents.IsACK(result) {
 			log.Fatalf("failed to send, %v", result)
@@ -224,15 +224,13 @@ var artifactFailedCmd = &cobra.Command{
 	},
 }
 
-
-
 func setExtensionForArtifactEvents(event cloudevents.Event) {
 	event.SetExtension("cdfartifactid", artifactId)
 	event.SetExtension("cdfartifactmodule", artifactModuleName)
 	event.SetExtension("cdfartifactpipeid", artifactPipelineId)
 
 	var extension = map[string]string{
-		"cdfartifactid":   artifactId,
+		"cdfartifactid":     artifactId,
 		"cdfartifactmodule": artifactModuleName,
 		"cdfartifactpipeid": artifactPipelineId,
 	}
