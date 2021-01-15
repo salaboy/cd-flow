@@ -21,7 +21,7 @@ func init() {
 	pipelineCmd.PersistentFlags().StringVarP(&pipelineName, "name", "n", "", "Pipeline's Name")
 	pipelineCmd.PersistentFlags().StringVarP(&pipelineBranch, "branch", "b", "", "Pipeline's Branch")
 	pipelineCmd.PersistentFlags().StringVarP(&pipelineType, "type", "t", "", "Pipeline's Type: Module / Environment")
-	pipelineCmd.PersistentFlags().StringVarP(&pipelineModuleName, "module", "p", "", "Pipeline's Module Name")
+	pipelineCmd.PersistentFlags().StringVarP(&moduleName, "module", "p", "", "Pipeline's Module Name")
 	pipelineCmd.PersistentFlags().StringVarP(&pipelineEnvName, "env", "e", "", "Pipeline's Environment Name")
 	pipelineCmd.PersistentFlags().StringToStringVarP(&pipelineData, "data", "d", map[string]string{}, "Pipeline's Data")
 
@@ -32,7 +32,6 @@ var (
 	pipelineName       string
 	pipelineBranch     string
 	pipelineType       string //module/environment
-	pipelineModuleName string
 	pipelineEnvName    string
 	pipelineData       map[string]string
 )
@@ -158,7 +157,7 @@ func setExtensionForPipelineEvents(event cloudevents.Event) {
 	event.SetExtension("cdfpipeid", pipelineId)
 	event.SetExtension("cdfpipename", pipelineName)
 	event.SetExtension("cdfpipetype", pipelineType)
-	event.SetExtension("cdfpipemodulename", pipelineModuleName)
+	event.SetExtension("cdfmodulename", moduleName)
 	event.SetExtension("cdfpipeenvname", pipelineEnvName)
 	event.SetExtension("cdfpipebranch", pipelineBranch)
 
@@ -166,7 +165,7 @@ func setExtensionForPipelineEvents(event cloudevents.Event) {
 		"cdfpipeid":         pipelineId,
 		"cdfpipename":       pipelineName,
 		"cdfpipetype":       pipelineType,
-		"cdfpipemodulename": pipelineModuleName,
+		"cdfmodulename": 	 moduleName,
 		"cdfpipeenvname":    pipelineEnvName,
 		"cdfpipebranch":     pipelineBranch,
 	}

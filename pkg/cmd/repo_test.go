@@ -19,7 +19,7 @@ func Test_setExtensionForRepoEvents(t *testing.T) {
 
 func createTestCloudEvent() cloudevents.Event {
 	event := cloudevents.NewEvent()
-	event.SetID("abc-123") //Generate with UUID
+	event.SetID("abc-123")
 	event.SetSource("cdf-events")
 	event.SetType("CDF.Repository.Created")
 	event.SetTime(time.Now())

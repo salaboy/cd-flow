@@ -20,8 +20,8 @@ func init() {
 	artifactCmd.AddCommand(artifactReleasedCmd)
 
 	artifactCmd.PersistentFlags().StringVarP(&artifactId, "id", "i", "", "Artifact's ID")
-	artifactCmd.PersistentFlags().StringVarP(&artifactPipelineId, "pipelineId", "p", "", "Artifact's Pipeline ID ")
-	artifactCmd.PersistentFlags().StringVarP(&artifactModuleName, "module", "m", "", "Artifact's Module Name ")
+	artifactCmd.PersistentFlags().StringVarP(&pipelineId, "pipelineId", "p", "", "Artifact's Pipeline ID")
+	artifactCmd.PersistentFlags().StringVarP(&moduleName, "module", "m", "", "Artifact's Module Name")
 
 	artifactCmd.PersistentFlags().StringToStringVarP(&artifactData, "data", "d", map[string]string{}, "Artifact's Data")
 }
@@ -34,8 +34,6 @@ var artifactCmd = &cobra.Command{
 
 var (
 	artifactId         string
-	artifactModuleName string
-	artifactPipelineId string
 	artifactData       map[string]string
 )
 
@@ -226,13 +224,13 @@ var artifactFailedCmd = &cobra.Command{
 
 func setExtensionForArtifactEvents(event cloudevents.Event) {
 	event.SetExtension("cdfartifactid", artifactId)
-	event.SetExtension("cdfartifactmodule", artifactModuleName)
-	event.SetExtension("cdfartifactpipeid", artifactPipelineId)
+	event.SetExtension("cdfmodulename", moduleName)
+	event.SetExtension("cdfpipeid", pipelineId)
 
 	var extension = map[string]string{
 		"cdfartifactid":     artifactId,
-		"cdfartifactmodule": artifactModuleName,
-		"cdfartifactpipeid": artifactPipelineId,
+		"cdfmodulename": moduleName,
+		"cdfpipeid": pipelineId,
 	}
 
 	bytes, err := json.Marshal(extension)

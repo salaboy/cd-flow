@@ -17,7 +17,7 @@ func init() {
 	moduleCmd.AddCommand(moduleCreatedCmd)
 	moduleCmd.PersistentFlags().StringVarP(&moduleName, "name", "n", "", "Module's Name")
 	moduleCmd.PersistentFlags().StringVarP(&moduleRepository, "repo", "r", "", "Module's Repository URL")
-	moduleCmd.PersistentFlags().StringVarP(&moduleProjectName, "project", "p", "", "Module Project's Name")
+	moduleCmd.PersistentFlags().StringVarP(&projectName, "project", "p", "", "Module Project's Name")
 	moduleCmd.PersistentFlags().StringToStringVarP(&moduleData, "data", "d", map[string]string{}, "Module's Data")
 }
 
@@ -28,10 +28,9 @@ var moduleCmd = &cobra.Command{
 }
 
 var (
-	moduleName        string
-	moduleProjectName string
-	moduleRepository  string
-	moduleData        map[string]string
+	moduleName       string
+	moduleRepository string
+	moduleData       map[string]string
 )
 
 var moduleCreatedCmd = &cobra.Command{
@@ -111,12 +110,12 @@ var moduleDeletedCmd = &cobra.Command{
 func setExtensionForModuleEvents(event cloudevents.Event) {
 	event.SetExtension("cdfmodulename", moduleName)
 	event.SetExtension("cdfmodulerepo", moduleRepository)
-	event.SetExtension("cdfmoduleprojectname", moduleProjectName)
+	event.SetExtension("cdfprojectname", projectName)
 
 	var extension = map[string]string{
-		"cdfmodulename":        moduleName,
-		"cdfmodulerepo":        moduleRepository,
-		"cdfmoduleprojectname": moduleProjectName,
+		"cdfmodulename":  moduleName,
+		"cdfmodulerepo":  moduleRepository,
+		"cdfprojectname": projectName,
 	}
 
 	bytes, err := json.Marshal(extension)
