@@ -24,13 +24,13 @@ spec:
         - name: jx-variables
           resources: {}
         - image: gcr.io/camunda-researchanddevelopment/cd-flow:0.0.6
-            name: cdf-start-pipeline
-            resources: { }
-            script: |
-              #!/usr/bin/env sh
-              source /workspace/source/.jx/variables.sh
-              export CDF_SINK=http://backend.35.204.61.61.xip.io/api/events
-              cdf pipeline started --type module --module cd-flow-cli --id $VERSION || true
+          name: cdf-start-pipeline
+          resources: { }
+          script: |
+            #!/usr/bin/env sh
+            source /workspace/source/.jx/variables.sh
+            export CDF_SINK=http://backend.35.204.61.61.xip.io/api/events
+            cdf pipeline started --type module --module cd-flow-cli --id $VERSION || true
         - name: release-binary
           resources: {}
         - name: build-and-push-image
