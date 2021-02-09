@@ -252,12 +252,12 @@ The following events exemplify a flow and it's different sections:
 - **Project Detected/Registered**
   - (Optional it can be inferred) CDF.Project.Created `./cdf project created --name my-project`
   - (Optional it can be inferred) CDF.Module.Created  `./cdf module created --name my-module --project my-project --repo http://github.com/salaboy/my-module`
-    - CDF.Pipeline.Started -> Main objective is to build, test and release an artifact. This pipeline is project scoped. `./cdf pipeline started --type module --module my-module --id 1`
-      - CDF.Artifact.Built `./cdf artifact built --module my-module --pipelineId 1 --id my-artifact-id`
-      - CDF.Artifact.TestsStarted `./cdf artifact test-started --module my-module --pipelineId 1 --id my-artifact-id`
-      - CDF.Artifact.TestsEnded  `./cdf artifact test-ended --module my-module --pipelineId 1 --id my-artifact-id`
-      - CDF.Artifact.Released  `./cdf artifact released --module my-module --pipelineId 1 --id my-artifact-id`
-    - CDF.Pipeline.Finished `./cdf pipeline finished --type module --module my-module --id 1`
+    - CDF.Pipeline.Started -> `./cdf pipeline started --type module --project my-project --module my-module --id 1`
+      - CDF.Artifact.Built `./cdf artifact built --module my-module --project my-project --pipelineId 1 --id my-artifact-id`
+      - CDF.Artifact.TestsStarted `./cdf artifact test-started --project my-project --module my-module --pipelineId 1 --id my-artifact-id`
+      - CDF.Artifact.TestsEnded  `./cdf artifact test-ended --project my-project --module my-module --pipelineId 1 --id my-artifact-id`
+      - CDF.Artifact.Released  `./cdf artifact released --project my-project --module my-module --pipelineId 1 --id my-artifact-id`
+    - CDF.Pipeline.Finished `./cdf pipeline finished --project my-project --type module --module my-module --id 1`
   
 - **Promotion To Environment via PR**
   - CDF.Environment.PR.Created

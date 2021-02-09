@@ -3,6 +3,7 @@ package cmd
 import (
 	"context"
 	"encoding/json"
+	"github.com/spf13/viper"
 	"log"
 	"time"
 
@@ -21,7 +22,8 @@ func init() {
 	pipelineCmd.PersistentFlags().StringVarP(&pipelineName, "name", "n", "", "Pipeline's Name")
 	pipelineCmd.PersistentFlags().StringVarP(&pipelineBranch, "branch", "b", "", "Pipeline's Branch")
 	pipelineCmd.PersistentFlags().StringVarP(&pipelineType, "type", "t", "", "Pipeline's Type: Module / Environment")
-	pipelineCmd.PersistentFlags().StringVarP(&moduleName, "module", "p", "", "Pipeline's Module Name")
+	pipelineCmd.PersistentFlags().StringVarP(&moduleName, "module", "m", "", "Pipeline's Module Name")
+	pipelineCmd.PersistentFlags().StringVarP(&projectName, "project", "p", "", "Pipeline's Project's Name")
 	pipelineCmd.PersistentFlags().StringVarP(&pipelineEnvName, "env", "e", "", "Pipeline's Environment Name")
 	pipelineCmd.PersistentFlags().StringToStringVarP(&pipelineData, "data", "d", map[string]string{}, "Pipeline's Data")
 
@@ -157,9 +159,16 @@ func setExtensionForPipelineEvents(event cloudevents.Event) {
 	event.SetExtension("cdfpipeid", pipelineId)
 	event.SetExtension("cdfpipename", pipelineName)
 	event.SetExtension("cdfpipetype", pipelineType)
+	if moduleName == "" {
+		moduleName = viper.GetString("cdf.module.name")
+	}
+	if projectName == "" {
+		projectName = viper.GetString("cdf.project.name")
+	}
 	event.SetExtension("cdfmodulename", moduleName)
 	event.SetExtension("cdfpipeenvname", pipelineEnvName)
 	event.SetExtension("cdfpipebranch", pipelineBranch)
+	event.SetExtension("cdfprojectname", projectName)
 
 	var extension = map[string]string{
 		"cdfpipeid":         pipelineId,
@@ -168,6 +177,7 @@ func setExtensionForPipelineEvents(event cloudevents.Event) {
 		"cdfmodulename": 	 moduleName,
 		"cdfpipeenvname":    pipelineEnvName,
 		"cdfpipebranch":     pipelineBranch,
+		"cdfprojectname":    projectName,
 	}
 
 	bytes, err := json.Marshal(extension)

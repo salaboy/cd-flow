@@ -3,6 +3,7 @@ package cmd
 import (
 	"context"
 	"encoding/json"
+	"github.com/spf13/viper"
 	"log"
 	"time"
 
@@ -10,6 +11,7 @@ import (
 	uuid "github.com/satori/go.uuid"
 	"github.com/spf13/cobra"
 )
+
 
 func init() {
 	rootCmd.AddCommand(projectCmd)
@@ -63,6 +65,12 @@ var projectCreatedCmd = &cobra.Command{
 			log.Fatalf("failed to send, %v", result)
 			return result
 		}
+
+		viper.Set("cdf.project.name", projectName)
+		viper.WriteConfig()
+
+		log.Printf("cdf.project.name set to %s\n", viper.GetString("cdf.project.name"))
+
 
 		return nil
 	},

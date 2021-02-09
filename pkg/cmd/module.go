@@ -3,6 +3,7 @@ package cmd
 import (
 	"context"
 	"encoding/json"
+	"github.com/spf13/viper"
 	"log"
 	"time"
 
@@ -10,6 +11,7 @@ import (
 	uuid "github.com/satori/go.uuid"
 	"github.com/spf13/cobra"
 )
+
 
 func init() {
 	rootCmd.AddCommand(moduleCmd)
@@ -66,6 +68,13 @@ var moduleCreatedCmd = &cobra.Command{
 			return result
 		}
 
+		viper.Set("cdf.module.name", moduleName)
+		viper.Set("cdf.project.name", projectName)
+		viper.WriteConfig()
+
+		log.Printf("cdf.project.name set to %s\n", viper.GetString("cdf.project.name") )
+		log.Printf("cdf.module.name set to %s\n", viper.GetString("cdf.module.name") )
+
 		return nil
 	},
 }
@@ -110,6 +119,11 @@ var moduleDeletedCmd = &cobra.Command{
 func setExtensionForModuleEvents(event cloudevents.Event) {
 	event.SetExtension("cdfmodulename", moduleName)
 	event.SetExtension("cdfmodulerepo", moduleRepository)
+
+	if projectName == ""{
+		projectName= viper.GetString("cdf.project.name")
+
+	}
 	event.SetExtension("cdfprojectname", projectName)
 
 	var extension = map[string]string{

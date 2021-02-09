@@ -3,6 +3,7 @@ package cmd
 import (
 	"context"
 	"encoding/json"
+	"github.com/spf13/viper"
 	"log"
 	"time"
 
@@ -20,11 +21,12 @@ func init() {
 	artifactCmd.AddCommand(artifactReleasedCmd)
 
 	artifactCmd.PersistentFlags().StringVarP(&artifactId, "id", "i", "", "Artifact's ID")
-	artifactCmd.PersistentFlags().StringVarP(&pipelineId, "pipelineId", "p", "", "Artifact's Pipeline ID")
+	artifactCmd.PersistentFlags().StringVarP(&projectName, "project", "p", "", "Artifact's Project's Name")
+	artifactCmd.PersistentFlags().StringVarP(&pipelineId, "pipelineId", "j", "", "Artifact's Pipeline ID")
 	artifactCmd.PersistentFlags().StringVarP(&artifactVersion, "version", "v", "", "Artifact's Version")
 	artifactCmd.PersistentFlags().StringVarP(&moduleName, "module", "m", "", "Artifact's Module Name")
-
 	artifactCmd.PersistentFlags().StringToStringVarP(&artifactData, "data", "d", map[string]string{}, "Artifact's Data")
+
 }
 
 var artifactCmd = &cobra.Command{
@@ -227,14 +229,24 @@ var artifactFailedCmd = &cobra.Command{
 func setExtensionForArtifactEvents(event cloudevents.Event) {
 	event.SetExtension("cdfartifactid", artifactId)
 	event.SetExtension("cdfartifactversion", artifactVersion)
+	if moduleName == "" {
+		moduleName = viper.GetString("cdf.module.name")
+	}
+
+	if projectName == "" {
+		projectName = viper.GetString("cdf.project.name");
+	}
+
 	event.SetExtension("cdfmodulename", moduleName)
 	event.SetExtension("cdfpipeid", pipelineId)
+	event.SetExtension("cdfprojectname", projectName)
 
 	var extension = map[string]string{
 		"cdfartifactid":     artifactId,
 		"cdfartifactversion": artifactVersion,
 		"cdfmodulename": moduleName,
 		"cdfpipeid": pipelineId,
+		"cdfprojectname": projectName,
 	}
 
 	bytes, err := json.Marshal(extension)
