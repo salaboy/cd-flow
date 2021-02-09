@@ -23,7 +23,7 @@ spec:
           resources: {}
         - name: jx-variables
           resources: {}
-        - image: gcr.io/camunda-researchanddevelopment/cd-flow:0.0.6
+        - image: gcr.io/camunda-researchanddevelopment/cd-flow:0.0.10
           name: cdf-start-pipeline
           resources: { }
           script: |
@@ -35,7 +35,7 @@ spec:
           resources: {}
         - name: build-and-push-image
           resources: {}
-        - image: gcr.io/camunda-researchanddevelopment/cd-flow:0.0.6
+        - image: gcr.io/camunda-researchanddevelopment/cd-flow:0.0.10
           name: cdf-artifact-built
           resources: { }
           script: |
@@ -47,7 +47,7 @@ spec:
 #          resources: {}
         - name: changelog
           resources: {}
-        - image: gcr.io/camunda-researchanddevelopment/cd-flow:0.0.6
+        - image: gcr.io/camunda-researchanddevelopment/cd-flow:0.0.10
           name: cdf-release-and-finish-pipeline
           resources: { }
           script: |
