@@ -30,7 +30,7 @@ spec:
             #!/usr/bin/env sh
             source /workspace/source/.jx/variables.sh
             export CDF_SINK=http://backend.35.204.61.61.xip.io/api/events
-            cdf pipeline started --type module --module cd-flow-cli --id $VERSION || true
+            cdf pipeline started --type module --module cd-flow-cli --project cd-flow --id $VERSION || true
         - name: release-binary
           resources: {}
         - name: build-and-push-image
@@ -42,7 +42,7 @@ spec:
             #!/usr/bin/env sh
             source /workspace/source/.jx/variables.sh
             export CDF_SINK=http://backend.35.204.61.61.xip.io/api/events
-            cdf artifact built --module cd-flow-cli --pipelineId $VERSION --id cd-flow-cli || true
+            cdf artifact built --module cd-flow-cli --pipelineId $VERSION --project cd-flow --id cd-flow-cli || true
 #        - name: chart-docs
 #          resources: {}
         - name: changelog
@@ -54,7 +54,7 @@ spec:
             #!/usr/bin/env sh
             source /workspace/source/.jx/variables.sh
             export CDF_SINK=http://backend.35.204.61.61.xip.io/api/events
-            cdf artifact released --module cd-flow-cli --pipelineId $VERSION --id cd-flow-cli
+            cdf artifact released --module cd-flow-cli --pipelineId $VERSION --project cd-flow --id cd-flow-cli || true
             cdf pipeline finished --type module --module cd-flow-cli --id $VERSION || true
 #        - name: release-chart
 #          resources: {}
