@@ -12,30 +12,34 @@ import (
 )
 
 func init() {
-	rootCmd.AddCommand(envCmd)
-	envCmd.AddCommand(envCreatedCmd)
-	envCmd.AddCommand(envDeletedCmd)
+	rootCmd.AddCommand(serviceCmd)
+	serviceCmd.AddCommand(serviceCreatedCmd)
+	serviceCmd.AddCommand(serviceDeletedCmd)
 
-	envCmd.PersistentFlags().StringVarP(&envName, "name", "n", "", "Environment's Name")
-	envCmd.PersistentFlags().StringToStringVarP(&envData, "data", "d", map[string]string{}, "Environment's Data")
+	serviceCmd.PersistentFlags().StringVarP(&serviceName, "env", "e", "", "Environment where the Service is running")
+	serviceCmd.PersistentFlags().StringVarP(&serviceName, "name", "n", "", "Service's Name")
+	serviceCmd.PersistentFlags().StringVarP(&serviceVersion, "version", "v", "", "Service's Version")
+	serviceCmd.PersistentFlags().StringVarP(&serviceArtifact, "artifact", "a", "", "Service's Artifact")
+	serviceCmd.PersistentFlags().StringToStringVarP(&serviceData, "data", "d", map[string]string{}, "Service's Data")
 }
 
-var envCmd = &cobra.Command{
+var serviceCmd = &cobra.Command{
 	Use:   "env",
 	Short: "Emit Environment related Events",
 	Long:  `Emit Environment related CloudEvent`,
 }
 
 var (
-	envName string
-	envRepoUrl string
-	envData map[string]string
+	serviceName string
+	serviceVersion string
+	serviceArtifact string
+	serviceData map[string]string
 )
 
-var envCreatedCmd = &cobra.Command{
+var serviceCreatedCmd = &cobra.Command{
 	Use:   "created",
-	Short: "Emit Env Created Event",
-	Long:  `Emit Environment Created CloudEvent`,
+	Short: "Emit Service Created Event",
+	Long:  `Emit Service Created CloudEvent`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		c, err := cloudevents.NewDefaultClient()
 		if err != nil {
@@ -47,10 +51,10 @@ var envCreatedCmd = &cobra.Command{
 		event := cloudevents.NewEvent()
 		event.SetID(uuid.NewV4().String())
 		event.SetSource("cdf-events")
-		event.SetType("CDF.Environment.Created")
+		event.SetType("CDF.Service.Created")
 		event.SetTime(time.Now())
 
-		setExtensionForEnvEvents(event)
+		setExtensionForServiceEvents(event)
 
 		event.SetData(cloudevents.ApplicationJSON, projectData)
 
@@ -69,10 +73,10 @@ var envCreatedCmd = &cobra.Command{
 	},
 }
 
-var envDeletedCmd = &cobra.Command{
+var serviceDeletedCmd = &cobra.Command{
 	Use:   "deleted",
-	Short: "Emit Environment Deleted Event",
-	Long:  `Emit Environment Deleted CloudEvent`,
+	Short: "Emit Service Deleted Event",
+	Long:  `Emit Service Deleted CloudEvent`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		c, err := cloudevents.NewDefaultClient()
 		if err != nil {
@@ -84,10 +88,10 @@ var envDeletedCmd = &cobra.Command{
 		event := cloudevents.NewEvent()
 		event.SetID(uuid.NewV4().String())
 		event.SetSource("cdf-events")
-		event.SetType("CDF.Environment.Deleted")
+		event.SetType("CDF.Service.Deleted")
 		event.SetTime(time.Now())
 
-		setExtensionForEnvEvents(event)
+		setExtensionForServiceEvents(event)
 
 		event.SetData(cloudevents.ApplicationJSON, projectData) //
 
@@ -106,13 +110,17 @@ var envDeletedCmd = &cobra.Command{
 	},
 }
 
-func setExtensionForEnvEvents(event cloudevents.Event) {
+func setExtensionForServiceEvents(event cloudevents.Event) {
 	event.SetExtension("cdfenvname", envName)
-	event.SetExtension("cdfenvrepo", envRepoUrl)
+	event.SetExtension("cdfservicename", serviceName)
+	event.SetExtension("cdfserviceversion", serviceVersion)
+	event.SetExtension("cdfserviceartifact", serviceArtifact)
 
 	var extension = map[string]string{
 		"cdfenvname": envName,
-		"cdfenvrepo": envRepoUrl,
+		"cdfservicename": serviceName,
+		"cdfserviceversion": serviceVersion,
+		"cdfserviceartifact": serviceArtifact,
 	}
 
 	bytes, err := json.Marshal(extension)
