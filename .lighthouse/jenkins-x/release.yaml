@@ -56,10 +56,10 @@ spec:
             export CDF_SINK=http://backend.35.204.61.61.xip.io/api/events
             cdf artifact released --module cd-flow-cli --pipelineId $VERSION --project cd-flow --id cd-flow-cli || true
             cdf pipeline finished --type module --module cd-flow-cli --id $VERSION || true
-#        - name: release-chart
-#          resources: {}
-#        - name: upload-binaries
-#          resources: {}
+        - name: release-chart
+          resources: {}
+        - name: upload-binaries
+          resources: {}
 #        - name: promote-release
 #          resources: {}
   serviceAccountName: tekton-bot
