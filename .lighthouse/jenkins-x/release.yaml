@@ -25,7 +25,7 @@ spec:
           resources: {}
         - image: gcr.io/camunda-researchanddevelopment/cd-flow:0.0.10
           name: cdf-start-pipeline
-          resources: { }
+          resources: {}
           script: |
             #!/usr/bin/env sh
             source /workspace/source/.jx/variables.sh
@@ -37,19 +37,19 @@ spec:
           resources: {}
         - image: gcr.io/camunda-researchanddevelopment/cd-flow:0.0.10
           name: cdf-artifact-built
-          resources: { }
+          resources: {}
           script: |
             #!/usr/bin/env sh
             source /workspace/source/.jx/variables.sh
             export CDF_SINK=http://backend.35.204.61.61.xip.io/api/events
             cdf artifact built --module cd-flow-cli --pipelineId $VERSION --project cd-flow --id cd-flow-cli || true
-#        - name: chart-docs
-#          resources: {}
+        - name: chart-docs
+          resources: {}
         - name: changelog
           resources: {}
         - image: gcr.io/camunda-researchanddevelopment/cd-flow:0.0.10
           name: cdf-release-and-finish-pipeline
-          resources: { }
+          resources: {}
           script: |
             #!/usr/bin/env sh
             source /workspace/source/.jx/variables.sh
@@ -60,8 +60,8 @@ spec:
           resources: {}
         - name: upload-binaries
           resources: {}
-#        - name: promote-release
-#          resources: {}
+          #        - name: promote-release
+          #          resources: {}
   serviceAccountName: tekton-bot
   timeout: 240h0m0s
 status: {}
