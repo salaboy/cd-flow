@@ -17,6 +17,7 @@ func init() {
 	envCmd.AddCommand(envDeletedCmd)
 
 	envCmd.PersistentFlags().StringVarP(&envName, "name", "n", "", "Environment's Name")
+	envCmd.PersistentFlags().StringVarP(&envRepoUrl, "repo", "r", "", "Environment's RepoUrl")
 	envCmd.PersistentFlags().StringToStringVarP(&envData, "data", "d", map[string]string{}, "Environment's Data")
 }
 

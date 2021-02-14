@@ -16,7 +16,7 @@ func init() {
 	serviceCmd.AddCommand(serviceCreatedCmd)
 	serviceCmd.AddCommand(serviceDeletedCmd)
 
-	serviceCmd.PersistentFlags().StringVarP(&serviceName, "env", "e", "", "Environment where the Service is running")
+	serviceCmd.PersistentFlags().StringVarP(&envName, "env", "e", "", "Environment where the Service is running")
 	serviceCmd.PersistentFlags().StringVarP(&serviceName, "name", "n", "", "Service's Name")
 	serviceCmd.PersistentFlags().StringVarP(&serviceVersion, "version", "v", "", "Service's Version")
 	serviceCmd.PersistentFlags().StringVarP(&serviceArtifact, "artifact", "a", "", "Service's Artifact")
@@ -24,7 +24,7 @@ func init() {
 }
 
 var serviceCmd = &cobra.Command{
-	Use:   "env",
+	Use:   "service",
 	Short: "Emit Environment related Events",
 	Long:  `Emit Environment related CloudEvent`,
 }
@@ -52,6 +52,43 @@ var serviceCreatedCmd = &cobra.Command{
 		event.SetID(uuid.NewV4().String())
 		event.SetSource("cdf-events")
 		event.SetType("CDF.Service.Created")
+		event.SetTime(time.Now())
+
+		setExtensionForServiceEvents(event)
+
+		event.SetData(cloudevents.ApplicationJSON, projectData)
+
+		// Set a target.
+		ctx := cloudevents.ContextWithTarget(context.Background(), CDF_SINK)
+
+		// Send that Event.
+		log.Printf("sending event %s\n", event)
+
+		if result := c.Send(ctx, event); !cloudevents.IsACK(result) {
+			log.Fatalf("failed to send, %v", result)
+			return result
+		}
+
+		return nil
+	},
+}
+
+var serviceUpdatedCmd = &cobra.Command{
+	Use:   "updated",
+	Short: "Emit Service Updated Event",
+	Long:  `Emit Service Updated CloudEvent`,
+	RunE: func(cmd *cobra.Command, args []string) error {
+		c, err := cloudevents.NewDefaultClient()
+		if err != nil {
+			log.Fatalf("failed to create client, %v", err)
+			return err
+		}
+
+		// Create an Event.
+		event := cloudevents.NewEvent()
+		event.SetID(uuid.NewV4().String())
+		event.SetSource("cdf-events")
+		event.SetType("CDF.Service.Updated")
 		event.SetTime(time.Now())
 
 		setExtensionForServiceEvents(event)

@@ -259,6 +259,11 @@ The following events exemplify a flow and it's different sections:
       - CDF.Artifact.Released  `./cdf artifact released --project my-project --module my-module --pipelineId 1 --id my-artifact-id`
     - CDF.Pipeline.Finished `./cdf pipeline finished --project my-project --type module --module my-module --id 1`
   
+- **Environment Events**
+  - CDF.Environment.Created `./cdf env created --name staging`
+  - CDF.Service.Created `./cdf service created --version 1.0.0 --version my-artifact my-service --env staging`
+  - CDF.Service.Updated `./cdf service updated --version 1.0.1 --version my-artifact my-service --env staging`
+
 - **Promotion To Environment via PR**
   - CDF.Environment.PR.Created
   - CDF.Pipeline.Started -> Main objective is to verify the new version of the artifact and deployment descriptors. This pipeline is environment scoped
