@@ -14,6 +14,7 @@ import (
 func init() {
 	rootCmd.AddCommand(serviceCmd)
 	serviceCmd.AddCommand(serviceCreatedCmd)
+	serviceCmd.AddCommand(serviceUpdatedCmd)
 	serviceCmd.AddCommand(serviceDeletedCmd)
 
 	serviceCmd.PersistentFlags().StringVarP(&envName, "env", "e", "", "Environment where the Service is running")
